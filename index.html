@@ -66,7 +66,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-ui); f
 .btn-icon {
   background: none; border: 1px solid var(--border); color: var(--text2); cursor: pointer;
   border-radius: var(--radius); padding: 5px 10px; font-size: 13px; transition: all .15s; white-space: nowrap;
-  text-decoration: none; display: inline-flex; align-items: center;
 }
 .btn-icon:hover { border-color: var(--accent2); color: var(--accent2); }
 .hamburger { display: none; }
@@ -126,6 +125,8 @@ tr.hidden { display: none; }
   user-select: none;
 }
 .cmd-pill:hover { border-color: var(--accent); background: rgba(218,138,103,.1); }
+.cmd-pill:hover + .copy-hint, .cmd-pill:focus + .copy-hint { opacity: 1; }
+.copy-hint { font-size: 10px; color: var(--text2); opacity: 0; transition: opacity .15s; pointer-events: none; }
 .aliases { display: flex; gap: 4px; flex-wrap: wrap; }
 .alias { font-family: var(--font-mono); font-size: 11px; color: var(--text2); background: var(--bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: var(--radius); }
 .args { font-family: var(--font-mono); font-size: 12px; color: var(--accent2); white-space: nowrap; }
@@ -194,7 +195,7 @@ kbd {
 .change-removed { background: rgba(248,81,73,.15); color: var(--red); }
 .muted { color: var(--text2); font-size: 13px; font-style: italic; }
 
-/* ── Toast ─────────────────────────────────────────────────────────────────── */
+/* ── Toast (copy feedback) ─────────────────────────────────────────────────── */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: var(--bg3); border: 1px solid var(--border); color: var(--text);
@@ -235,22 +236,22 @@ kbd {
 
 <!-- Header -->
 <header class="header">
-  <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">&#9776;</button>
+  <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
   <span class="header-version">v1.0.0</span>
   <span class="header-updated">Updated 2026-04-04</span>
 
   <div class="search-wrap">
-    <input class="search-input" type="search" placeholder="Search commands, shortcuts&#8230;" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
+    <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
   </div>
 
   <div class="header-actions">
-    <button class="btn-icon" onclick="toggleTheme()" title="Toggle light/dark">&#9681;</button>
-    <a class="btn-icon" href="https://docs.anthropic.com/en/docs/claude-code/cli-reference" target="_blank" rel="noopener">Docs &#8599;</a>
+    <button class="btn-icon" onclick="toggleTheme()" id="theme-btn" title="Toggle light/dark">◑</button>
+    <a class="btn-icon" href="https://docs.anthropic.com/en/docs/claude-code/cli-reference" target="_blank" rel="noopener" title="Official docs">Docs ↗</a>
   </div>
 </header>
 
-<!-- Mobile overlay -->
+<!-- Sidebar overlay (mobile) -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
 
 <!-- Sidebar -->
@@ -258,22 +259,24 @@ kbd {
   <a class="nav-link" href="#quick-start" onclick="closeDrawer()"><span class="nav-icon">★</span>Quick Start</a><a class="nav-link" href="#session" onclick="closeDrawer()"><span class="nav-icon">⟳</span>Session Management</a><a class="nav-link" href="#settings" onclick="closeDrawer()"><span class="nav-icon">⚙</span>Settings &amp; Configuration</a><a class="nav-link" href="#memory" onclick="closeDrawer()"><span class="nav-icon">◈</span>Memory &amp; Context</a><a class="nav-link" href="#planning" onclick="closeDrawer()"><span class="nav-icon">◎</span>Planning &amp; Workflow</a><a class="nav-link" href="#git" onclick="closeDrawer()"><span class="nav-icon">⎇</span>Code Review &amp; Git</a><a class="nav-link" href="#tools" onclick="closeDrawer()"><span class="nav-icon">⬡</span>Tools &amp; Extensions</a><a class="nav-link" href="#workspace" onclick="closeDrawer()"><span class="nav-icon">▣</span>Workspace &amp; IDE</a><a class="nav-link" href="#output" onclick="closeDrawer()"><span class="nav-icon">↗</span>Export &amp; Output</a><a class="nav-link" href="#account" onclick="closeDrawer()"><span class="nav-icon">◉</span>Account &amp; System</a><a class="nav-link" href="#skills" onclick="closeDrawer()"><span class="nav-icon">◆</span>Bundled Skills</a><a class="nav-link" href="#shortcuts" onclick="closeDrawer()"><span class="nav-icon">⌨</span>Keyboard Shortcuts</a><a class="nav-link" href="#permission-modes" onclick="closeDrawer()"><span class="nav-icon">⊛</span>Permission Modes</a><a class="nav-link" href="#input-prefixes" onclick="closeDrawer()"><span class="nav-icon">❯</span>Input Prefixes</a><a class="nav-link" href="#cli-flags" onclick="closeDrawer()"><span class="nav-icon">⚑</span>CLI Flags</a><a class="nav-link" href="#changelog" onclick="closeDrawer()"><span class="nav-icon">↻</span>Changelog</a>
 </nav>
 
-<!-- Main -->
+<!-- Main content -->
 <main class="main">
 
+  <!-- Hero -->
   <div class="hero">
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
-    <p class="hero-sub">Every command, shortcut, and mode &#8212; always current. Click any command to copy it.</p>
+    <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
       <span class="hero-chip">v1.0.0</span>
       <span class="hero-chip">Updated 2026-04-04</span>
-      <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases &#8599;</a></span>
+      <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
 
+  <!-- Quick Start -->
   <section id="quick-start" class="content-section">
     <h2 class="section-heading" style="--accent:#da8a67">
-      <span class="section-icon">&#9733;</span>Quick Start &#8212; Top 10 for New Agentic Engineers
+      <span class="section-icon">★</span>Quick Start — Top 10 for New Agentic Engineers
     </h2>
     <div class="qs-grid">
     <div class="qs-card">
@@ -323,7 +326,7 @@ kbd {
         <code>/mcp</code>
         <span class="copy-hint">copy</span>
       </div>
-      <p class="qs-why">Connect external tools — Slack, Jira, Google Drive, GitHub — into Claude&#x27;s context.</p>
+      <p class="qs-why">Connect external tools — Slack, Jira, Google Drive, GitHub — into Claude's context.</p>
     </div>
     <div class="qs-card">
       <div class="qs-cmd" onclick="copyCmd('/batch')" title="Click to copy">
@@ -348,6 +351,7 @@ kbd {
     </div></div>
   </section>
 
+  <!-- All command sections -->
   
   <section id="session" class="content-section">
     <h2 class="section-heading" style="--accent:#6C8EBF">
@@ -1226,9 +1230,10 @@ kbd {
   </div>
   </section>
 
+  <!-- Keyboard Shortcuts -->
   <section id="shortcuts" class="content-section">
     <h2 class="section-heading" style="--accent:#79c0ff">
-      <span class="section-icon">&#9000;</span>Keyboard Shortcuts
+      <span class="section-icon">⌨</span>Keyboard Shortcuts
     </h2>
     
     <h3 class="sub-heading">General Controls</h3>
@@ -1299,7 +1304,8 @@ kbd {
           <tr data-search="Hold Space Push-to-talk voice dictation (if voice enabled)">
             <td class="kbd-cell"><kbd>Hold Space</kbd></td>
             <td>Push-to-talk voice dictation (if voice enabled)</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
     <h3 class="sub-heading">Text Editing</h3>
@@ -1330,7 +1336,8 @@ kbd {
           <tr data-search="Alt+F Move cursor forward one word">
             <td class="kbd-cell"><kbd>Alt+F</kbd></td>
             <td>Move cursor forward one word</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
     <h3 class="sub-heading">Multiline Input</h3>
@@ -1353,7 +1360,8 @@ kbd {
           <tr data-search="Ctrl+J New line (line feed — works everywhere)">
             <td class="kbd-cell"><kbd>Ctrl+J</kbd></td>
             <td>New line (line feed — works everywhere)</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
     <h3 class="sub-heading">Vim Mode — Mode Switching</h3>
@@ -1388,7 +1396,8 @@ kbd {
           <tr data-search="O Open new line above">
             <td class="kbd-cell"><kbd>O</kbd></td>
             <td>Open new line above</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
     <h3 class="sub-heading">Vim Mode — Navigation</h3>
@@ -1447,7 +1456,8 @@ kbd {
           <tr data-search=", Repeat last f/F/t/T in reverse">
             <td class="kbd-cell"><kbd>,</kbd></td>
             <td>Repeat last f/F/t/T in reverse</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
     <h3 class="sub-heading">Vim Mode — Editing</h3>
@@ -1502,14 +1512,16 @@ kbd {
           <tr data-search=". Repeat last change">
             <td class="kbd-cell"><kbd>.</kbd></td>
             <td>Repeat last change</td>
-          </tr></tbody>
+          </tr>
+        </tbody>
       </table>
     </div>
   </section>
 
+  <!-- Permission Modes -->
   <section id="permission-modes" class="content-section">
     <h2 class="section-heading" style="--accent:#bc8cff">
-      <span class="section-icon">&#8859;</span>Permission Modes
+      <span class="section-icon">⊛</span>Permission Modes
     </h2>
     <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Cycle through modes with <kbd>Shift+Tab</kbd>. The mode you pick determines how much Claude does autonomously vs. how much requires your approval.</p>
     
@@ -1551,9 +1563,10 @@ kbd {
   </div>
   </section>
 
+  <!-- Input Prefixes -->
   <section id="input-prefixes" class="content-section">
     <h2 class="section-heading" style="--accent:#ffa657">
-      <span class="section-icon">&#10095;</span>Special Input Prefixes
+      <span class="section-icon">❯</span>Special Input Prefixes
     </h2>
     
   <div class="table-wrap">
@@ -1576,9 +1589,10 @@ kbd {
   </div>
   </section>
 
+  <!-- CLI Flags -->
   <section id="cli-flags" class="content-section">
     <h2 class="section-heading" style="--accent:#3fb950">
-      <span class="section-icon">&#9873;</span>CLI Flags
+      <span class="section-icon">⚑</span>CLI Flags
     </h2>
     <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Flags for the <code style="font-family:var(--font-mono);color:var(--accent)">claude</code> startup command. Combine freely.</p>
     
@@ -1685,22 +1699,27 @@ kbd {
   </div>
   </section>
 
+  <!-- Changelog -->
   <section id="changelog" class="content-section">
     <h2 class="section-heading" style="--accent:#f85149">
-      <span class="section-icon">&#8635;</span>Auto-Update Changelog
+      <span class="section-icon">↻</span>Auto-Update Changelog
     </h2>
-    <p class="muted">No updates recorded yet — the GitHub Actions workflow will populate this automatically when a new Claude Code version is released.</p>
+    <p class="muted">No updates recorded yet — the workflow will populate this automatically when a new Claude Code version is released.</p>
   </section>
 
 </main>
 
+<!-- Toast notification -->
 <div class="toast" id="toast">Copied!</div>
-<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8593;</button>
+
+<!-- Back to top -->
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
 
 <script>
+// ── Theme ────────────────────────────────────────────────────────────────────
 const root = document.documentElement;
-const saved = localStorage.getItem('theme') || 'dark';
-if (saved === 'light') root.setAttribute('data-theme', 'light');
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if (savedTheme === 'light') root.setAttribute('data-theme', 'light');
 
 function toggleTheme() {
   const isLight = root.getAttribute('data-theme') === 'light';
@@ -1708,6 +1727,7 @@ function toggleTheme() {
   localStorage.setItem('theme', isLight ? 'dark' : 'light');
 }
 
+// ── Copy to clipboard ────────────────────────────────────────────────────────
 function copyCmd(text) {
   navigator.clipboard.writeText(text).then(() => showToast('Copied: ' + text));
 }
@@ -1719,17 +1739,24 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 1800);
 }
 
+// ── Search ───────────────────────────────────────────────────────────────────
 function handleSearch(query) {
   const q = query.toLowerCase().trim();
   document.querySelectorAll('tr[data-search]').forEach(row => {
-    row.classList.toggle('hidden', !!q && !row.dataset.search.toLowerCase().includes(q));
+    const match = !q || row.dataset.search.toLowerCase().includes(q);
+    row.classList.toggle('hidden', !match);
   });
+  // Also filter quick-start cards
   document.querySelectorAll('.qs-card').forEach(card => {
-    card.style.display = (!q || card.textContent.toLowerCase().includes(q)) ? '' : 'none';
+    const text = card.textContent.toLowerCase();
+    card.style.display = (!q || text.includes(q)) ? '' : 'none';
   });
 }
 
+// ── Sidebar active link ──────────────────────────────────────────────────────
 const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('.content-section');
+
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -1737,8 +1764,10 @@ const observer = new IntersectionObserver(entries => {
     }
   });
 }, { rootMargin: '-20% 0px -70% 0px' });
-document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
 
+sections.forEach(s => observer.observe(s));
+
+// ── Mobile drawer ────────────────────────────────────────────────────────────
 function toggleDrawer() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('overlay').classList.toggle('open');
@@ -1748,6 +1777,7 @@ function closeDrawer() {
   document.getElementById('overlay').classList.remove('open');
 }
 
+// ── Back to top ──────────────────────────────────────────────────────────────
 window.addEventListener('scroll', () => {
   document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
 });
