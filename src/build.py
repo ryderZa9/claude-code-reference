@@ -12,6 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 data = json.loads((ROOT / "data" / "commands.json").read_text())
 version = json.loads((ROOT / "data" / "version.json").read_text())
+user_md = (ROOT / "data" / "user.md").read_text()
+custom_agents = json.loads((ROOT / "data" / "custom-agents.json").read_text())
 
 def esc(s):
     return htmllib.escape(str(s or ""), quote=True)
@@ -196,13 +198,121 @@ def build_changelog():
     </div>'''
     return out
 
+# ── User profile ──────────────────────────────────────────────────────────────
+
+def simple_md_to_html(md):
+    """Minimal markdown → HTML for user.md (headings, bold, lists, paragraphs)."""
+    lines = md.strip().split('\n')
+    out = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith('# '):
+            out.append(f'<h3 class="profile-h1">{esc(stripped[2:])}</h3>')
+        elif stripped.startswith('## '):
+            out.append(f'<h4 class="profile-h2">{esc(stripped[3:])}</h4>')
+        elif stripped.startswith('- '):
+            text = stripped[2:]
+            # Handle **bold**
+            import re
+            text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+            out.append(f'<li>{text}</li>')
+        elif stripped == '':
+            out.append('<br>')
+        else:
+            import re
+            text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', stripped)
+            out.append(f'<p>{text}</p>')
+    return '\n'.join(out)
+
+def build_user_profile():
+    rendered = simple_md_to_html(user_md)
+    # Escape the raw markdown for embedding in a JS variable
+    escaped_md = user_md.replace('\\', '\\\\').replace('`', '\\`').replace('$', '\\$')
+    return f'''
+    <div class="profile-card" id="profile-card">
+      <div class="profile-header">
+        <span class="profile-icon">&#9671;</span>
+        <span class="profile-title">User Profile</span>
+        <div class="profile-actions">
+          <button class="btn-sm" onclick="toggleEditProfile()" id="profile-edit-btn">Edit</button>
+          <button class="btn-sm btn-export" onclick="exportProfile()" title="Copy markdown to clipboard">Export</button>
+        </div>
+      </div>
+      <div class="profile-view" id="profile-view">{rendered}</div>
+      <textarea class="profile-editor" id="profile-editor" style="display:none" spellcheck="false">{esc(user_md)}</textarea>
+    </div>
+    <script>const DEFAULT_PROFILE = `{escaped_md}`;</script>'''
+
+# ── Built-in agents ───────────────────────────────────────────────────────────
+
+def build_builtin_agents():
+    agents = data.get("agents", {}).get("built_in", [])
+    rows = ""
+    for a in agents:
+        edit_badge = '<span class="badge badge-green">yes</span>' if a.get("can_edit") else '<span class="badge badge-yellow">read-only</span>'
+        search = esc(a["type"] + " " + a["description"])
+        rows += f'''
+    <tr data-search="{search}">
+      <td><code class="agent-pill">{esc(a["type"])}</code></td>
+      <td>{esc(a["description"])}</td>
+      <td class="tools-cell">{esc(a["tools"])}</td>
+      <td>{edit_badge}</td>
+    </tr>'''
+    return f'''
+    <p style="color:var(--text2);font-size:13px;margin-bottom:12px;">Spawn with <code style="font-family:var(--font-mono);color:var(--accent)">subagent_type</code> parameter in the Agent tool, or Claude auto-selects based on your task.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Agent Type</th><th>Description</th><th>Tool Access</th><th>Can Edit Files</th></tr></thead>
+        <tbody>{rows}</tbody>
+      </table>
+    </div>'''
+
+# ── Custom agents ─────────────────────────────────────────────────────────────
+
+def build_custom_agents():
+    agents_json = json.dumps(custom_agents).replace('\\', '\\\\').replace('`', '\\`').replace('$', '\\$')
+    cards = ""
+    for a in custom_agents:
+        cards += f'''
+      <div class="ca-card" data-name="{esc(a["name"])}">
+        <div class="ca-header">
+          <code class="agent-pill">{esc(a["name"])}</code>
+          <span class="ca-path">{esc(a.get("file_path", ""))}</span>
+          <button class="btn-sm btn-delete" onclick="deleteCustomAgent('{esc(a["name"])}')" title="Remove">&#10005;</button>
+        </div>
+        <p class="ca-desc">{esc(a["description"])}</p>
+        <p class="ca-when"><strong>When to use:</strong> {esc(a.get("when_to_use", ""))}</p>
+      </div>'''
+
+    return f'''
+    <p style="color:var(--text2);font-size:13px;margin-bottom:12px;">Custom agents live in <code style="font-family:var(--font-mono);color:var(--accent)">.claude/agents/</code> as markdown files. Add them here to track what you've built.</p>
+    <div id="custom-agents-list">{cards}</div>
+    <div class="ca-add-form" id="ca-add-form">
+      <div class="ca-form-row">
+        <input type="text" id="ca-name" placeholder="agent-name" class="ca-input" spellcheck="false">
+        <input type="text" id="ca-path" placeholder=".claude/agents/my-agent.md" class="ca-input" spellcheck="false">
+      </div>
+      <textarea id="ca-desc" placeholder="What does this agent do?" class="ca-textarea" rows="2" spellcheck="false"></textarea>
+      <textarea id="ca-when" placeholder="When should Claude use this agent?" class="ca-textarea" rows="2" spellcheck="false"></textarea>
+      <button class="btn-sm btn-add" onclick="addCustomAgent()">+ Add Agent</button>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn-sm btn-export" onclick="exportCustomAgents()" title="Copy JSON to clipboard">Export JSON</button>
+    </div>
+    <script>const DEFAULT_CUSTOM_AGENTS = `{agents_json}`;</script>'''
+
 # ── Sidebar nav ───────────────────────────────────────────────────────────────
 
 def build_nav():
-    links = [("quick-start", "Quick Start", "★")]
+    links = [
+        ("user-profile", "User Profile", "◇"),
+        ("quick-start", "Quick Start", "★"),
+    ]
     for s in data["sections"]:
         links.append((s["id"], s["title"], s["icon"]))
     links += [
+        ("built-in-agents", "Built-in Agents", "⬢"),
+        ("custom-agents", "Custom Agents", "✦"),
         ("shortcuts", "Keyboard Shortcuts", "⌨"),
         ("permission-modes", "Permission Modes", "⊛"),
         ("input-prefixes", "Input Prefixes", "❯"),
@@ -427,6 +537,51 @@ kbd {{
 .change-removed {{ background: rgba(248,81,73,.15); color: var(--red); }}
 .muted {{ color: var(--text2); font-size: 13px; font-style: italic; }}
 
+/* ── User Profile ──────────────────────────────────────────────────────────── */
+.profile-card {{ background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; }}
+.profile-header {{ display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }}
+.profile-icon {{ font-size: 18px; color: var(--accent); }}
+.profile-title {{ font-size: 16px; font-weight: 600; color: var(--text); }}
+.profile-actions {{ margin-left: auto; display: flex; gap: 6px; }}
+.profile-view p {{ color: var(--text2); font-size: 13px; margin: 4px 0; }}
+.profile-view strong {{ color: var(--text); }}
+.profile-view li {{ color: var(--text2); font-size: 13px; margin-left: 16px; list-style: disc; }}
+.profile-view br {{ display: block; margin: 4px 0; }}
+.profile-h1 {{ font-size: 16px; font-weight: 600; color: var(--text); margin: 12px 0 6px; }}
+.profile-h2 {{ font-size: 14px; font-weight: 600; color: var(--accent2); margin: 12px 0 6px; }}
+.profile-editor {{ width: 100%; min-height: 200px; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-mono); font-size: 13px; padding: 12px; resize: vertical; outline: none; }}
+.profile-editor:focus {{ border-color: var(--accent2); }}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.btn-sm {{ background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: var(--radius); padding: 4px 12px; font-size: 12px; cursor: pointer; transition: all .15s; }}
+.btn-sm:hover {{ border-color: var(--accent2); color: var(--accent2); }}
+.btn-add {{ background: rgba(63,185,80,.1); border-color: var(--green); color: var(--green); }}
+.btn-add:hover {{ background: rgba(63,185,80,.2); }}
+.btn-delete {{ background: none; border: none; color: var(--text2); cursor: pointer; font-size: 14px; padding: 2px 6px; }}
+.btn-delete:hover {{ color: var(--red); }}
+.btn-export {{ background: rgba(121,192,255,.08); border-color: var(--accent2); color: var(--accent2); }}
+.btn-save {{ background: rgba(63,185,80,.1); border-color: var(--green); color: var(--green); }}
+
+/* ── Agent pills ───────────────────────────────────────────────────────────── */
+.agent-pill {{ display: inline-block; background: var(--bg3); border: 1px solid var(--border); color: var(--purple); font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: var(--radius); cursor: pointer; white-space: nowrap; }}
+.agent-pill:hover {{ border-color: var(--purple); }}
+.tools-cell {{ font-size: 12px; color: var(--text2); }}
+
+/* ── Custom Agents ─────────────────────────────────────────────────────────── */
+.ca-card {{ background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px; transition: border-color .15s; }}
+.ca-card:hover {{ border-color: var(--purple); }}
+.ca-header {{ display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }}
+.ca-path {{ font-family: var(--font-mono); font-size: 11px; color: var(--text2); margin-left: auto; }}
+.ca-desc {{ font-size: 13px; color: var(--text2); margin-bottom: 4px; }}
+.ca-when {{ font-size: 12px; color: var(--text2); }}
+.ca-when strong {{ color: var(--text); }}
+.ca-add-form {{ background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius); padding: 16px; margin-top: 16px; }}
+.ca-form-row {{ display: flex; gap: 8px; margin-bottom: 8px; }}
+.ca-input {{ flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; outline: none; }}
+.ca-input:focus {{ border-color: var(--accent2); }}
+.ca-textarea {{ width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: var(--font-ui); font-size: 13px; padding: 6px 10px; outline: none; resize: vertical; margin-bottom: 8px; }}
+.ca-textarea:focus {{ border-color: var(--accent2); }}
+
 /* ── Toast ─────────────────────────────────────────────────────────────────── */
 .toast {{
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -504,6 +659,13 @@ kbd {{
     </div>
   </div>
 
+  <section id="user-profile" class="content-section">
+    <h2 class="section-heading" style="--accent:#da8a67">
+      <span class="section-icon">&#9671;</span>User Profile
+    </h2>
+    {build_user_profile()}
+  </section>
+
   <section id="quick-start" class="content-section">
     <h2 class="section-heading" style="--accent:#da8a67">
       <span class="section-icon">&#9733;</span>Quick Start &#8212; Top 10 for New Agentic Engineers
@@ -512,6 +674,20 @@ kbd {{
   </section>
 
   {sections_html}
+
+  <section id="built-in-agents" class="content-section">
+    <h2 class="section-heading" style="--accent:#bc8cff">
+      <span class="section-icon">&#11042;</span>Built-in Agents
+    </h2>
+    {build_builtin_agents()}
+  </section>
+
+  <section id="custom-agents" class="content-section">
+    <h2 class="section-heading" style="--accent:#ffa657">
+      <span class="section-icon">&#10022;</span>My Custom Agents
+    </h2>
+    {build_custom_agents()}
+  </section>
 
   <section id="shortcuts" class="content-section">
     <h2 class="section-heading" style="--accent:#79c0ff">
@@ -609,6 +785,116 @@ function closeDrawer() {{
 window.addEventListener('scroll', () => {{
   document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
 }});
+
+// ── User Profile (localStorage) ──────────────────────────────────────────────
+function loadProfile() {{
+  const saved = localStorage.getItem('user-profile-md');
+  if (saved) {{
+    document.getElementById('profile-editor').value = saved;
+    document.getElementById('profile-view').innerHTML = renderMd(saved);
+  }}
+}}
+function renderMd(md) {{
+  return md.split('\\n').map(line => {{
+    const t = line.trim();
+    if (t.startsWith('# ')) return '<h3 class="profile-h1">' + esc(t.slice(2)) + '</h3>';
+    if (t.startsWith('## ')) return '<h4 class="profile-h2">' + esc(t.slice(3)) + '</h4>';
+    if (t.startsWith('- ')) return '<li>' + t.slice(2).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</li>';
+    if (t === '') return '<br>';
+    return '<p>' + t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</p>';
+  }}).join('\\n');
+}}
+function esc(s) {{ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }}
+
+let profileEditing = false;
+function toggleEditProfile() {{
+  profileEditing = !profileEditing;
+  const view = document.getElementById('profile-view');
+  const editor = document.getElementById('profile-editor');
+  const btn = document.getElementById('profile-edit-btn');
+  if (profileEditing) {{
+    view.style.display = 'none';
+    editor.style.display = '';
+    btn.textContent = 'Save';
+    btn.classList.add('btn-save');
+  }} else {{
+    const md = editor.value;
+    localStorage.setItem('user-profile-md', md);
+    view.innerHTML = renderMd(md);
+    view.style.display = '';
+    editor.style.display = 'none';
+    btn.textContent = 'Edit';
+    btn.classList.remove('btn-save');
+    showToast('Profile saved');
+  }}
+}}
+function exportProfile() {{
+  const md = document.getElementById('profile-editor').value;
+  navigator.clipboard.writeText(md).then(() => showToast('Profile markdown copied — paste into data/user.md'));
+}}
+loadProfile();
+
+// ── Custom Agents (localStorage) ─────────────────────────────────────────────
+function loadCustomAgents() {{
+  const saved = localStorage.getItem('custom-agents-json');
+  if (saved) {{
+    try {{
+      const agents = JSON.parse(saved);
+      renderCustomAgents(agents);
+    }} catch(e) {{}}
+  }}
+}}
+function getCustomAgents() {{
+  const saved = localStorage.getItem('custom-agents-json');
+  if (saved) {{ try {{ return JSON.parse(saved); }} catch(e) {{}} }}
+  return JSON.parse(DEFAULT_CUSTOM_AGENTS);
+}}
+function saveCustomAgents(agents) {{
+  localStorage.setItem('custom-agents-json', JSON.stringify(agents));
+  renderCustomAgents(agents);
+}}
+function renderCustomAgents(agents) {{
+  const list = document.getElementById('custom-agents-list');
+  if (!agents.length) {{
+    list.innerHTML = '<p class="muted">No custom agents yet — add one below.</p>';
+    return;
+  }}
+  list.innerHTML = agents.map(a => `
+    <div class="ca-card" data-name="${{esc(a.name)}}">
+      <div class="ca-header">
+        <code class="agent-pill">${{esc(a.name)}}</code>
+        <span class="ca-path">${{esc(a.file_path || '')}}</span>
+        <button class="btn-sm btn-delete" onclick="deleteCustomAgent('${{esc(a.name)}}')" title="Remove">&#10005;</button>
+      </div>
+      <p class="ca-desc">${{esc(a.description)}}</p>
+      <p class="ca-when"><strong>When to use:</strong> ${{esc(a.when_to_use || '')}}</p>
+    </div>`).join('');
+}}
+function addCustomAgent() {{
+  const name = document.getElementById('ca-name').value.trim();
+  const desc = document.getElementById('ca-desc').value.trim();
+  const when = document.getElementById('ca-when').value.trim();
+  const path = document.getElementById('ca-path').value.trim();
+  if (!name || !desc) {{ showToast('Need at least a name and description'); return; }}
+  const agents = getCustomAgents();
+  agents.push({{ name, description: desc, when_to_use: when, file_path: path || '.claude/agents/' + name + '.md' }});
+  saveCustomAgents(agents);
+  document.getElementById('ca-name').value = '';
+  document.getElementById('ca-desc').value = '';
+  document.getElementById('ca-when').value = '';
+  document.getElementById('ca-path').value = '';
+  showToast('Agent added: ' + name);
+}}
+function deleteCustomAgent(name) {{
+  const agents = getCustomAgents().filter(a => a.name !== name);
+  saveCustomAgents(agents);
+  showToast('Removed: ' + name);
+}}
+function exportCustomAgents() {{
+  const agents = getCustomAgents();
+  navigator.clipboard.writeText(JSON.stringify(agents, null, 2)).then(() => showToast('Custom agents JSON copied — paste into data/custom-agents.json'));
+}}
+loadCustomAgents();
 </script>
 </body>
 </html>"""

@@ -1,0 +1,8 @@
+[
+  {
+    "name": "example-agent",
+    "description": "This is a placeholder — edit or delete it and add your own custom agents.",
+    "when_to_use": "When you need a starting point for creating your first custom agent.",
+    "file_path": ".claude/agents/example-agent.md"
+  }
+]

@@ -268,5 +268,38 @@
     { "flag": "--bare", "description": "Skip auto-discovery for faster startup (use with -p)", "example": "claude --bare -p \"query\"" },
     { "flag": "-v, --version", "description": "Show current version", "example": "claude -v" },
     { "flag": "--help", "description": "Show help", "example": "claude --help" }
-  ]
+  ],
+  "agents": {
+    "how_to_spawn": "Use the Agent tool with subagent_type parameter, or Claude auto-selects based on task context.",
+    "custom_agents_path": ".claude/agents/",
+    "custom_agents_format": "Markdown files (AGENT_NAME.md) with tool restrictions and instructions.",
+    "built_in": [
+      { "type": "general-purpose", "description": "General-purpose agent for research, code search, and multi-step tasks", "tools": "All tools", "can_edit": true },
+      { "type": "Explore", "description": "Fast codebase exploration — find files, search code, answer architecture questions", "tools": "Read-only (no Edit/Write)", "can_edit": false },
+      { "type": "Plan", "description": "Software architect — designs implementation plans and identifies critical files", "tools": "Read-only (no Edit/Write)", "can_edit": false },
+      { "type": "code-simplifier", "description": "Simplify and refine code for maximum clarity while preserving all functionality", "tools": "All tools", "can_edit": true },
+      { "type": "code-auditor", "description": "Compare implementations against specs, find gaps, missing edge cases. READ-ONLY", "tools": "Read-only", "can_edit": false },
+      { "type": "qa-engineer", "description": "Design test strategies, run test suites (pytest/vitest/jest/playwright), verify coverage", "tools": "All tools", "can_edit": true },
+      { "type": "security-specialist", "description": "Security audits, OWASP Top 10, threat modeling, dependency CVE scanning, secrets detection", "tools": "Read-only", "can_edit": false },
+      { "type": "devils-advocate", "description": "Challenge assumptions, identify risks, score confidence, find failure modes", "tools": "All tools", "can_edit": true },
+      { "type": "lead-architect", "description": "System architecture, API design, database architecture, ADRs, Mermaid diagrams. No code", "tools": "All tools", "can_edit": true },
+      { "type": "technical-writer", "description": "API docs (OpenAPI), READMEs, developer guides, migration guides, changelogs", "tools": "All tools", "can_edit": true },
+      { "type": "product-owner", "description": "PRDs, user stories with acceptance criteria, MVP scope, RICE/MoSCoW prioritization. No code", "tools": "All tools", "can_edit": true },
+      { "type": "research-analyst", "description": "Research technologies, compare frameworks, evaluate libraries, produce structured briefs", "tools": "All tools", "can_edit": true },
+      { "type": "venture-strategist", "description": "Market sizing (TAM/SAM/SOM), competitive analysis, pricing strategy, SaaS unit economics", "tools": "All tools", "can_edit": true },
+      { "type": "ios-developer", "description": "Native iOS/SwiftUI code — views, navigation, Swift concurrency, SwiftData, HealthKit/CloudKit", "tools": "All tools", "can_edit": true },
+      { "type": "mobile-developer", "description": "React Native / Expo — screens, navigation, FlashList, Reanimated, MMKV, NativeWind", "tools": "All tools", "can_edit": true },
+      { "type": "rust-systems-developer", "description": "Production Rust — ownership, async Tokio, axum/sqlx/serde, error handling, benchmarks", "tools": "All tools", "can_edit": true },
+      { "type": "performance-engineer", "description": "Optimize React, Next.js, React Native, iOS performance. Profiling-first approach", "tools": "All tools", "can_edit": true },
+      { "type": "devops-engineer", "description": "CI/CD pipelines, IaC (Terraform/Pulumi), deployment strategies, monitoring, rollback plans", "tools": "All tools", "can_edit": true },
+      { "type": "ai-agent-architect", "description": "AI/LLM system design, multi-agent orchestration, RAG, tool schemas, prompt engineering", "tools": "All tools", "can_edit": true },
+      { "type": "ux-strategist", "description": "UX audits (Nielsen's 10), user journey mapping, information architecture, WCAG 2.2 AA", "tools": "All tools", "can_edit": true },
+      { "type": "ui-validator", "description": "Visual QA — validate UI across viewports, component states, interactions, accessibility", "tools": "Read-only", "can_edit": false },
+      { "type": "design-systems-specialist", "description": "Design tokens, component libraries (atomic design), multi-theme architecture, WCAG compliance", "tools": "All tools", "can_edit": true },
+      { "type": "content-strategist", "description": "Editorial calendars, content briefs, brand voice, SEO content planning, distribution strategy", "tools": "All tools", "can_edit": true },
+      { "type": "community-manager", "description": "Discord/Telegram/Discourse engagement, moderation, event planning, growth strategies", "tools": "All tools", "can_edit": true },
+      { "type": "claude-code-guide", "description": "Answer questions about Claude Code features, hooks, MCP servers, settings, IDE integrations", "tools": "Read-only + Web", "can_edit": false },
+      { "type": "statusline-setup", "description": "Configure the Claude Code status line setting", "tools": "Read + Edit only", "can_edit": true }
+    ]
+  }
 }
