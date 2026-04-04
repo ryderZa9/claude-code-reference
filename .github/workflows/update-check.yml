@@ -1,0 +1,58 @@
+name: Check for Claude Code Updates
+
+on:
+  schedule:
+    # Runs every day at 9 AM UTC — free GitHub Actions minutes
+    - cron: '0 9 * * *'
+  workflow_dispatch:  # Also allows manual trigger from GitHub UI
+
+permissions:
+  contents: write  # Needed to commit updated data files
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check for new Claude Code version
+        id: check
+        run: |
+          LATEST=$(curl -s https://registry.npmjs.org/@anthropic-ai/claude-code/latest | node -e "process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).version))")
+          STORED=$(node -e "console.log(require('./data/version.json').last_version)")
+          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          echo "stored=$STORED" >> $GITHUB_OUTPUT
+          if [ "$LATEST" != "$STORED" ]; then
+            echo "new_version=true" >> $GITHUB_OUTPUT
+            echo "New version found: $STORED → $LATEST"
+          else
+            echo "new_version=false" >> $GITHUB_OUTPUT
+            echo "Already up to date: $STORED"
+          fi
+
+      - name: Fetch release notes and update data
+        if: steps.check.outputs.new_version == 'true'
+        run: node src/check-updates.js
+
+      - name: Rebuild index.html
+        if: steps.check.outputs.new_version == 'true'
+        run: node src/build.js
+
+      - name: Commit and push changes
+        if: steps.check.outputs.new_version == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/commands.json data/version.json index.html
+          git commit -m "chore: update to Claude Code v${{ steps.check.outputs.latest }}"
+          git push
+
+      - name: No update needed
+        if: steps.check.outputs.new_version == 'false'
+        run: echo "Claude Code is still at ${{ steps.check.outputs.stored }} — nothing to do."

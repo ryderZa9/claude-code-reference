@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-reference",
+  "version": "1.0.0",
+  "description": "Always-current Claude Code reference guide — auto-updated on every release",
+  "type": "module",
+  "scripts": {
+    "build": "node src/build.js",
+    "check-updates": "node src/check-updates.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

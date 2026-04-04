@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Reference</title>
+<style>
+/* ── Reset & Variables ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1f2937;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --accent: #da8a67;
+  --accent2: #79c0ff;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --red: #f85149;
+  --purple: #bc8cff;
+  --orange: #ffa657;
+  --sidebar-w: 240px;
+  --header-h: 56px;
+  --radius: 6px;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg2: #f6f8fa;
+  --bg3: #eaeef2;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --text2: #57606a;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-ui); font-size: 14px; line-height: 1.6; }
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--header-h);
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; padding: 0 16px; z-index: 100;
+}
+.header-logo { font-family: var(--font-mono); font-size: 18px; color: var(--accent); font-weight: 700; white-space: nowrap; }
+.header-logo span { color: var(--accent2); }
+.header-version { font-family: var(--font-mono); font-size: 11px; color: var(--text2); background: var(--bg3); padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+.header-updated { font-size: 11px; color: var(--text2); white-space: nowrap; }
+
+.search-wrap { flex: 1; max-width: 420px; margin-left: auto; }
+.search-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); font-family: var(--font-ui); font-size: 13px; padding: 6px 12px 6px 32px;
+  outline: none; transition: border-color .15s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: 10px center;
+}
+.search-input:focus { border-color: var(--accent2); }
+
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.btn-icon {
+  background: none; border: 1px solid var(--border); color: var(--text2); cursor: pointer;
+  border-radius: var(--radius); padding: 5px 10px; font-size: 13px; transition: all .15s; white-space: nowrap;
+  text-decoration: none; display: inline-flex; align-items: center;
+}
+.btn-icon:hover { border-color: var(--accent2); color: var(--accent2); }
+.hamburger { display: none; }
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.layout { display: flex; padding-top: var(--header-h); min-height: 100vh; }
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+.sidebar {
+  position: fixed; top: var(--header-h); left: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 12px 0; z-index: 90;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.nav-link {
+  display: flex; align-items: center; gap: 8px; padding: 7px 16px;
+  color: var(--text2); text-decoration: none; font-size: 13px; transition: all .1s;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover { color: var(--text); background: var(--bg3); }
+.nav-link.active { color: var(--accent2); border-left-color: var(--accent2); background: var(--bg3); }
+.nav-icon { font-size: 12px; width: 16px; text-align: center; flex-shrink: 0; }
+
+/* ── Main ──────────────────────────────────────────────────────────────────── */
+.main { margin-left: var(--sidebar-w); flex: 1; padding: 32px 40px 80px; max-width: 1100px; }
+
+/* ── Section headings ──────────────────────────────────────────────────────── */
+.content-section { margin-bottom: 56px; }
+.section-heading {
+  font-size: 20px; font-weight: 600; margin-bottom: 20px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
+  color: var(--text);
+}
+.section-heading::before { content: ''; display: block; width: 3px; height: 22px; background: var(--accent); border-radius: 2px; }
+.section-icon { font-size: 16px; }
+.sub-heading { font-size: 14px; font-weight: 600; color: var(--text2); margin: 24px 0 10px; letter-spacing: .05em; text-transform: uppercase; }
+
+/* ── Tables ────────────────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--bg3); }
+th { padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+td { padding: 10px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: var(--bg3); }
+tr.hidden { display: none; }
+.notes-cell { font-size: 12px; color: var(--text2); }
+
+/* ── Command pills ─────────────────────────────────────────────────────────── */
+.cmd-cell { display: flex; flex-direction: column; gap: 4px; }
+.cmd-pill {
+  display: inline-block; background: var(--bg3); border: 1px solid var(--border);
+  color: var(--accent); font-family: var(--font-mono); font-size: 13px; padding: 2px 8px;
+  border-radius: var(--radius); cursor: pointer; transition: all .15s; white-space: nowrap;
+  user-select: none;
+}
+.cmd-pill:hover { border-color: var(--accent); background: rgba(218,138,103,.1); }
+.aliases { display: flex; gap: 4px; flex-wrap: wrap; }
+.alias { font-family: var(--font-mono); font-size: 11px; color: var(--text2); background: var(--bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: var(--radius); }
+.args { font-family: var(--font-mono); font-size: 12px; color: var(--accent2); white-space: nowrap; }
+.example-cmd { font-family: var(--font-mono); font-size: 12px; color: var(--text2); white-space: nowrap; }
+.muted-dash { color: var(--border); font-size: 13px; }
+.flag-pill { font-family: var(--font-mono); font-size: 12px; color: var(--purple); white-space: nowrap; }
+.prefix-pill { font-family: var(--font-mono); font-size: 18px; color: var(--orange); font-weight: 700; }
+.example { font-family: var(--font-mono); font-size: 12px; color: var(--text2); white-space: nowrap; }
+.mode-pill { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: var(--radius); border: 1px solid; }
+.mode-default { color: var(--text2); border-color: var(--border); }
+.mode-acceptEdits { color: var(--yellow); border-color: var(--yellow); }
+.mode-plan { color: var(--accent2); border-color: var(--accent2); }
+.mode-auto { color: var(--green); border-color: var(--green); }
+.mode-bypassPermissions { color: var(--red); border-color: var(--red); }
+.requires { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+/* ── Keyboard keys ─────────────────────────────────────────────────────────── */
+kbd {
+  display: inline-block; background: var(--bg3); border: 1px solid var(--border);
+  border-bottom-width: 2px; border-radius: 4px; font-family: var(--font-mono);
+  font-size: 11px; padding: 1px 6px; color: var(--text); white-space: nowrap;
+}
+.kbd-cell { white-space: nowrap; }
+.key-sep { color: var(--text2); font-size: 11px; margin: 0 2px; }
+
+/* ── Badges ────────────────────────────────────────────────────────────────── */
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.badge-green { background: rgba(63,185,80,.15); color: var(--green); }
+.badge-yellow { background: rgba(210,153,34,.15); color: var(--yellow); }
+.badge-red { background: rgba(248,81,73,.15); color: var(--red); }
+.badge-gray { background: var(--bg3); color: var(--text2); }
+
+/* ── Quick Start ───────────────────────────────────────────────────────────── */
+.qs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.qs-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; transition: border-color .15s; }
+.qs-card:hover { border-color: var(--accent2); }
+.qs-cmd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; }
+.qs-cmd code { font-family: var(--font-mono); font-size: 14px; color: var(--accent); font-weight: 600; }
+.qs-cmd .copy-hint { font-size: 10px; color: var(--text2); opacity: 0; transition: opacity .15s; }
+.qs-card:hover .copy-hint { opacity: 1; }
+.qs-why { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.hero { margin-bottom: 40px; padding: 28px 32px; background: linear-gradient(135deg, rgba(218,138,103,.08) 0%, rgba(121,192,255,.08) 100%); border: 1px solid var(--border); border-radius: 10px; }
+.hero-title { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.hero-title span { color: var(--accent); font-family: var(--font-mono); }
+.hero-sub { color: var(--text2); font-size: 14px; margin-bottom: 16px; }
+.hero-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+.hero-chip { font-size: 12px; color: var(--text2); background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 3px 10px; }
+.hero-chip a { color: var(--accent2); text-decoration: none; }
+.hero-chip a:hover { text-decoration: underline; }
+
+/* ── Changelog ─────────────────────────────────────────────────────────────── */
+.changelog-entry { padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; background: var(--bg2); }
+.changelog-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+.changelog-version { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--accent); }
+.changelog-date { font-size: 12px; color: var(--text2); }
+.changelog-link { font-size: 12px; color: var(--accent2); text-decoration: none; margin-left: auto; }
+.changelog-link:hover { text-decoration: underline; }
+.changelog-changes { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.changelog-changes li { font-size: 13px; color: var(--text2); display: flex; gap: 8px; align-items: flex-start; }
+.change-type { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: .04em; flex-shrink: 0; margin-top: 2px; }
+.change-new { background: rgba(63,185,80,.15); color: var(--green); }
+.change-updated { background: rgba(121,192,255,.15); color: var(--accent2); }
+.change-fix { background: rgba(210,153,34,.15); color: var(--yellow); }
+.change-removed { background: rgba(248,81,73,.15); color: var(--red); }
+.muted { color: var(--text2); font-size: 13px; font-style: italic; }
+
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+  padding: 8px 18px; border-radius: 20px; font-size: 13px; opacity: 0;
+  transition: all .25s; pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Back to top ───────────────────────────────────────────────────────────── */
+.back-top {
+  position: fixed; bottom: 28px; right: 28px; background: var(--bg3);
+  border: 1px solid var(--border); color: var(--text2); cursor: pointer;
+  border-radius: 50%; width: 38px; height: 38px; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: all .25s; pointer-events: none; z-index: 90;
+}
+.back-top.visible { opacity: 1; pointer-events: all; }
+.back-top:hover { border-color: var(--accent2); color: var(--accent2); }
+
+/* ── Overlay ───────────────────────────────────────────────────────────────── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 85; }
+.overlay.open { display: block; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar { left: calc(-1 * var(--sidebar-w)); transition: left .25s; }
+  .sidebar.open { left: 0; }
+  .main { margin-left: 0; padding: 20px 16px 80px; }
+  .hamburger { display: flex; }
+  .header-updated { display: none; }
+  .qs-grid { grid-template-columns: 1fr; }
+  .hero { padding: 20px; }
+  .hero-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">&#9776;</button>
+  <div class="header-logo">claude<span>/</span>ref</div>
+  <span class="header-version">v1.0.0</span>
+  <span class="header-updated">Updated 2026-04-04</span>
+
+  <div class="search-wrap">
+    <input class="search-input" type="search" placeholder="Search commands, shortcuts&#8230;" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
+  </div>
+
+  <div class="header-actions">
+    <button class="btn-icon" onclick="toggleTheme()" title="Toggle light/dark">&#9681;</button>
+    <a class="btn-icon" href="https://docs.anthropic.com/en/docs/claude-code/cli-reference" target="_blank" rel="noopener">Docs &#8599;</a>
+  </div>
+</header>
+
+<!-- Mobile overlay -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <a class="nav-link" href="#quick-start" onclick="closeDrawer()"><span class="nav-icon">★</span>Quick Start</a><a class="nav-link" href="#session" onclick="closeDrawer()"><span class="nav-icon">⟳</span>Session Management</a><a class="nav-link" href="#settings" onclick="closeDrawer()"><span class="nav-icon">⚙</span>Settings &amp; Configuration</a><a class="nav-link" href="#memory" onclick="closeDrawer()"><span class="nav-icon">◈</span>Memory &amp; Context</a><a class="nav-link" href="#planning" onclick="closeDrawer()"><span class="nav-icon">◎</span>Planning &amp; Workflow</a><a class="nav-link" href="#git" onclick="closeDrawer()"><span class="nav-icon">⎇</span>Code Review &amp; Git</a><a class="nav-link" href="#tools" onclick="closeDrawer()"><span class="nav-icon">⬡</span>Tools &amp; Extensions</a><a class="nav-link" href="#workspace" onclick="closeDrawer()"><span class="nav-icon">▣</span>Workspace &amp; IDE</a><a class="nav-link" href="#output" onclick="closeDrawer()"><span class="nav-icon">↗</span>Export &amp; Output</a><a class="nav-link" href="#account" onclick="closeDrawer()"><span class="nav-icon">◉</span>Account &amp; System</a><a class="nav-link" href="#skills" onclick="closeDrawer()"><span class="nav-icon">◆</span>Bundled Skills</a><a class="nav-link" href="#shortcuts" onclick="closeDrawer()"><span class="nav-icon">⌨</span>Keyboard Shortcuts</a><a class="nav-link" href="#permission-modes" onclick="closeDrawer()"><span class="nav-icon">⊛</span>Permission Modes</a><a class="nav-link" href="#input-prefixes" onclick="closeDrawer()"><span class="nav-icon">❯</span>Input Prefixes</a><a class="nav-link" href="#cli-flags" onclick="closeDrawer()"><span class="nav-icon">⚑</span>CLI Flags</a><a class="nav-link" href="#changelog" onclick="closeDrawer()"><span class="nav-icon">↻</span>Changelog</a>
+</nav>
+
+<!-- Main -->
+<main class="main">
+
+  <div class="hero">
+    <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
+    <p class="hero-sub">Every command, shortcut, and mode &#8212; always current. Click any command to copy it.</p>
+    <div class="hero-meta">
+      <span class="hero-chip">v1.0.0</span>
+      <span class="hero-chip">Updated 2026-04-04</span>
+      <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases &#8599;</a></span>
+    </div>
+  </div>
+
+  <section id="quick-start" class="content-section">
+    <h2 class="section-heading" style="--accent:#da8a67">
+      <span class="section-icon">&#9733;</span>Quick Start &#8212; Top 10 for New Agentic Engineers
+    </h2>
+    <div class="qs-grid">
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/plan')" title="Click to copy">
+        <code>/plan</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Enter plan mode — Claude proposes changes for your review before touching anything. Use this for every non-trivial task.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/init')" title="Click to copy">
+        <code>/init</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Bootstraps CLAUDE.md in your project so Claude understands your codebase rules, stack, and preferences from day one.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/memory')" title="Click to copy">
+        <code>/memory</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Edit your persistent memory files. What Claude remembers across sessions lives here.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/compact')" title="Click to copy">
+        <code>/compact</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Compress the conversation when context gets long. Keeps Claude sharp without starting over.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/diff')" title="Click to copy">
+        <code>/diff</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Interactive viewer for all uncommitted changes. Browse per-turn diffs with arrow keys.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/permissions')" title="Click to copy">
+        <code>/permissions</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Control exactly what Claude can do automatically vs. what requires your approval.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/mcp')" title="Click to copy">
+        <code>/mcp</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Connect external tools — Slack, Jira, Google Drive, GitHub — into Claude&#x27;s context.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/batch')" title="Click to copy">
+        <code>/batch</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Spawn parallel agents to execute large-scale changes across your codebase simultaneously.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/cost')" title="Click to copy">
+        <code>/cost</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">See token usage and spending at any point. Stay on top of your budget.</p>
+    </div>
+    <div class="qs-card">
+      <div class="qs-cmd" onclick="copyCmd('/doctor')" title="Click to copy">
+        <code>/doctor</code>
+        <span class="copy-hint">copy</span>
+      </div>
+      <p class="qs-why">Diagnose installation issues instantly. Run this first when something feels off.</p>
+    </div></div>
+  </section>
+
+  
+  <section id="session" class="content-section">
+    <h2 class="section-heading" style="--accent:#6C8EBF">
+      <span class="section-icon">⟳</span>Session Management
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/clear Clear conversation history and free up context window /reset /new">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/clear')" title="Click to copy">/clear</code>
+          <div class="aliases"><code class="alias">/reset</code><code class="alias">/new</code></div>
+        </div>
+      </td>
+      <td>Clear conversation history and free up context window</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/clear</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/resume Resume a conversation by ID or name, or open interactive picker /continue">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/resume')" title="Click to copy">/resume</code>
+          <div class="aliases"><code class="alias">/continue</code></div>
+        </div>
+      </td>
+      <td>Resume a conversation by ID or name, or open interactive picker</td>
+      <td><code class="args">[session ID or name]</code></td>
+      <td><code class="example-cmd">/resume auth-refactor</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/branch Create a branch of the current conversation at this point to explore a different approach /fork">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/branch')" title="Click to copy">/branch</code>
+          <div class="aliases"><code class="alias">/fork</code></div>
+        </div>
+      </td>
+      <td>Create a branch of the current conversation at this point to explore a different approach</td>
+      <td><code class="args">[branch name]</code></td>
+      <td><code class="example-cmd">/branch try-approach-b</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/rename Rename the current session. Auto-generates name from history if no name given ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/rename')" title="Click to copy">/rename</code>
+          
+        </div>
+      </td>
+      <td>Rename the current session. Auto-generates name from history if no name given</td>
+      <td><code class="args">[name]</code></td>
+      <td><code class="example-cmd">/rename auth-refactor</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/rewind Rewind conversation and code to a previous point, or summarize from a selected message /checkpoint">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/rewind')" title="Click to copy">/rewind</code>
+          <div class="aliases"><code class="alias">/checkpoint</code></div>
+        </div>
+      </td>
+      <td>Rewind conversation and code to a previous point, or summarize from a selected message</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/rewind</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/btw Ask a quick side question without adding to conversation history. Full context visibility, no tool access, low cost ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/btw')" title="Click to copy">/btw</code>
+          
+        </div>
+      </td>
+      <td>Ask a quick side question without adding to conversation history. Full context visibility, no tool access, low cost</td>
+      <td><code class="args">&lt;question&gt;</code></td>
+      <td><code class="example-cmd">/btw what does this function actually return?</code></td>
+      <td class="notes-cell">Single response only — no follow-ups</td>
+    </tr>
+    <tr data-search="/exit Exit Claude Code /quit">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/exit')" title="Click to copy">/exit</code>
+          <div class="aliases"><code class="alias">/quit</code></div>
+        </div>
+      </td>
+      <td>Exit Claude Code</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/exit</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="settings" class="content-section">
+    <h2 class="section-heading" style="--accent:#82B366">
+      <span class="section-icon">⚙</span>Settings &amp; Configuration
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/config Open Settings interface — theme, model, output style, preferences /settings">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/config')" title="Click to copy">/config</code>
+          <div class="aliases"><code class="alias">/settings</code></div>
+        </div>
+      </td>
+      <td>Open Settings interface — theme, model, output style, preferences</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/config</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/theme Change color theme (light/dark variants, colorblind-accessible, ANSI themes) ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/theme')" title="Click to copy">/theme</code>
+          
+        </div>
+      </td>
+      <td>Change color theme (light/dark variants, colorblind-accessible, ANSI themes)</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/theme</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/color Set prompt bar color for the current session ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/color')" title="Click to copy">/color</code>
+          
+        </div>
+      </td>
+      <td>Set prompt bar color for the current session</td>
+      <td><code class="args">[red|blue|green|yellow|purple|orange|pink|cyan|default]</code></td>
+      <td><code class="example-cmd">/color purple</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/model Select or change AI model. Takes effect immediately. Shortcuts: sonnet, opus ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/model')" title="Click to copy">/model</code>
+          
+        </div>
+      </td>
+      <td>Select or change AI model. Takes effect immediately. Shortcuts: sonnet, opus</td>
+      <td><code class="args">[model name]</code></td>
+      <td><code class="example-cmd">/model opus</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/effort Set model effort level. low/medium/high persist; max is session-only (Opus 4.6 only); auto resets to default ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/effort')" title="Click to copy">/effort</code>
+          
+        </div>
+      </td>
+      <td>Set model effort level. low/medium/high persist; max is session-only (Opus 4.6 only); auto resets to default</td>
+      <td><code class="args">[low|medium|high|max|auto]</code></td>
+      <td><code class="example-cmd">/effort high</code></td>
+      <td class="notes-cell">max = Opus 4.6 only</td>
+    </tr>
+    <tr data-search="/fast Toggle fast mode on/off for quicker responses ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/fast')" title="Click to copy">/fast</code>
+          
+        </div>
+      </td>
+      <td>Toggle fast mode on/off for quicker responses</td>
+      <td><code class="args">[on|off]</code></td>
+      <td><code class="example-cmd">/fast on</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/vim Toggle Vim editing mode for the input prompt ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/vim')" title="Click to copy">/vim</code>
+          
+        </div>
+      </td>
+      <td>Toggle Vim editing mode for the input prompt</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/vim</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/keybindings Open or create keybindings configuration file at ~/.claude/keybindings.json ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/keybindings')" title="Click to copy">/keybindings</code>
+          
+        </div>
+      </td>
+      <td>Open or create keybindings configuration file at ~/.claude/keybindings.json</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/keybindings</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/terminal-setup Configure terminal keybindings for Shift+Enter and other shortcuts ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/terminal-setup')" title="Click to copy">/terminal-setup</code>
+          
+        </div>
+      </td>
+      <td>Configure terminal keybindings for Shift+Enter and other shortcuts</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/terminal-setup</code></td>
+      <td class="notes-cell">Only shown for terminals that need it</td>
+    </tr>
+    <tr data-search="/statusline Configure the terminal status line. Describe what you want or auto-configure ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/statusline')" title="Click to copy">/statusline</code>
+          
+        </div>
+      </td>
+      <td>Configure the terminal status line. Describe what you want or auto-configure</td>
+      <td><code class="args">[description]</code></td>
+      <td><code class="example-cmd">/statusline show git branch and model name</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="memory" class="content-section">
+    <h2 class="section-heading" style="--accent:#D79B00">
+      <span class="section-icon">◈</span>Memory &amp; Context
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/memory Edit CLAUDE.md memory files, enable/disable auto-memory, view auto-memory entries ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/memory')" title="Click to copy">/memory</code>
+          
+        </div>
+      </td>
+      <td>Edit CLAUDE.md memory files, enable/disable auto-memory, view auto-memory entries</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/memory</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/init Initialize project with CLAUDE.md guide. Set CLAUDE_CODE_NEW_INIT=1 for interactive flow with skills, hooks, memory ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/init')" title="Click to copy">/init</code>
+          
+        </div>
+      </td>
+      <td>Initialize project with CLAUDE.md guide. Set CLAUDE_CODE_NEW_INIT=1 for interactive flow with skills, hooks, memory</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/init</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/context Visualize current context usage as a colored grid with optimization suggestions ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/context')" title="Click to copy">/context</code>
+          
+        </div>
+      </td>
+      <td>Visualize current context usage as a colored grid with optimization suggestions</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/context</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/compact Compact conversation to free context. Pass focus instructions to guide what is preserved ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/compact')" title="Click to copy">/compact</code>
+          
+        </div>
+      </td>
+      <td>Compact conversation to free context. Pass focus instructions to guide what is preserved</td>
+      <td><code class="args">[focus instructions]</code></td>
+      <td><code class="example-cmd">/compact focus on the auth flow changes</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="planning" class="content-section">
+    <h2 class="section-heading" style="--accent:#9673A6">
+      <span class="section-icon">◎</span>Planning &amp; Workflow
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/plan Enter plan mode — Claude proposes all changes for your review before execution ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/plan')" title="Click to copy">/plan</code>
+          
+        </div>
+      </td>
+      <td>Enter plan mode — Claude proposes all changes for your review before execution</td>
+      <td><code class="args">[task description]</code></td>
+      <td><code class="example-cmd">/plan refactor the auth middleware to use JWT</code></td>
+      <td class="notes-cell">Best practice for all non-trivial tasks</td>
+    </tr>
+    <tr data-search="/ultraplan Draft a plan in an ultraplan session, review in browser, then execute remotely or send back to terminal ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/ultraplan')" title="Click to copy">/ultraplan</code>
+          
+        </div>
+      </td>
+      <td>Draft a plan in an ultraplan session, review in browser, then execute remotely or send back to terminal</td>
+      <td><code class="args">&lt;prompt&gt;</code></td>
+      <td><code class="example-cmd">/ultraplan migrate the entire API layer to TypeScript</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/permissions Manage allow/ask/deny rules for tool permissions. Opens interactive dialog /allowed-tools">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/permissions')" title="Click to copy">/permissions</code>
+          <div class="aliases"><code class="alias">/allowed-tools</code></div>
+        </div>
+      </td>
+      <td>Manage allow/ask/deny rules for tool permissions. Opens interactive dialog</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/permissions</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/tasks List and manage background tasks /bashes">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/tasks')" title="Click to copy">/tasks</code>
+          <div class="aliases"><code class="alias">/bashes</code></div>
+        </div>
+      </td>
+      <td>List and manage background tasks</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/tasks</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/schedule Create, update, list, or run cloud scheduled tasks. Claude walks through setup conversationally ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/schedule')" title="Click to copy">/schedule</code>
+          
+        </div>
+      </td>
+      <td>Create, update, list, or run cloud scheduled tasks. Claude walks through setup conversationally</td>
+      <td><code class="args">[description]</code></td>
+      <td><code class="example-cmd">/schedule run tests every morning at 9am</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="git" class="content-section">
+    <h2 class="section-heading" style="--accent:#23A455">
+      <span class="section-icon">⎇</span>Code Review &amp; Git
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/diff Open interactive diff viewer showing uncommitted changes and per-turn diffs. Use arrow keys to browse ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/diff')" title="Click to copy">/diff</code>
+          
+        </div>
+      </td>
+      <td>Open interactive diff viewer showing uncommitted changes and per-turn diffs. Use arrow keys to browse</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/diff</code></td>
+      <td class="notes-cell">Requires git repo</td>
+    </tr>
+    <tr data-search="/pr-comments Fetch and display comments from a GitHub PR. Auto-detects current branch PR or pass URL/number ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/pr-comments')" title="Click to copy">/pr-comments</code>
+          
+        </div>
+      </td>
+      <td>Fetch and display comments from a GitHub PR. Auto-detects current branch PR or pass URL/number</td>
+      <td><code class="args">[PR URL or number]</code></td>
+      <td><code class="example-cmd">/pr-comments 142</code></td>
+      <td class="notes-cell">Requires gh CLI</td>
+    </tr>
+    <tr data-search="/security-review Analyze pending changes on current branch for security vulnerabilities (injection, auth, data exposure) ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/security-review')" title="Click to copy">/security-review</code>
+          
+        </div>
+      </td>
+      <td>Analyze pending changes on current branch for security vulnerabilities (injection, auth, data exposure)</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/security-review</code></td>
+      <td class="notes-cell">Requires git repo</td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="tools" class="content-section">
+    <h2 class="section-heading" style="--accent:#AE4132">
+      <span class="section-icon">⬡</span>Tools &amp; Extensions
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/mcp Manage MCP server connections and OAuth authentication. MCP prompts appear as /mcp__server__prompt commands ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/mcp')" title="Click to copy">/mcp</code>
+          
+        </div>
+      </td>
+      <td>Manage MCP server connections and OAuth authentication. MCP prompts appear as /mcp__server__prompt commands</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/mcp</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/plugin Manage Claude Code plugins /plugins">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/plugin')" title="Click to copy">/plugin</code>
+          <div class="aliases"><code class="alias">/plugins</code></div>
+        </div>
+      </td>
+      <td>Manage Claude Code plugins</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/plugin</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/reload-plugins Reload all active plugins without restarting. Reports counts and errors ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/reload-plugins')" title="Click to copy">/reload-plugins</code>
+          
+        </div>
+      </td>
+      <td>Reload all active plugins without restarting. Reports counts and errors</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/reload-plugins</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/skills List available skills (built-in and custom in .claude/skills/) ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/skills')" title="Click to copy">/skills</code>
+          
+        </div>
+      </td>
+      <td>List available skills (built-in and custom in .claude/skills/)</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/skills</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/hooks View hook configurations for tool events ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/hooks')" title="Click to copy">/hooks</code>
+          
+        </div>
+      </td>
+      <td>View hook configurations for tool events</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/hooks</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/agents Manage agent configurations ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/agents')" title="Click to copy">/agents</code>
+          
+        </div>
+      </td>
+      <td>Manage agent configurations</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/agents</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="workspace" class="content-section">
+    <h2 class="section-heading" style="--accent:#0E7490">
+      <span class="section-icon">▣</span>Workspace &amp; IDE
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/ide Manage IDE integrations (VS Code, JetBrains) and show connection status ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/ide')" title="Click to copy">/ide</code>
+          
+        </div>
+      </td>
+      <td>Manage IDE integrations (VS Code, JetBrains) and show connection status</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/ide</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/add-dir Add a working directory for file access in the current session ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/add-dir')" title="Click to copy">/add-dir</code>
+          
+        </div>
+      </td>
+      <td>Add a working directory for file access in the current session</td>
+      <td><code class="args">&lt;path&gt;</code></td>
+      <td><code class="example-cmd">/add-dir ../shared-lib</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/desktop Continue current session in Claude Code Desktop app /app">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/desktop')" title="Click to copy">/desktop</code>
+          <div class="aliases"><code class="alias">/app</code></div>
+        </div>
+      </td>
+      <td>Continue current session in Claude Code Desktop app</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/desktop</code></td>
+      <td class="notes-cell">macOS/Windows only</td>
+    </tr>
+    <tr data-search="/mobile Show QR code to download the Claude mobile app /ios /android">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/mobile')" title="Click to copy">/mobile</code>
+          <div class="aliases"><code class="alias">/ios</code><code class="alias">/android</code></div>
+        </div>
+      </td>
+      <td>Show QR code to download the Claude mobile app</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/mobile</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/chrome Configure Claude in Chrome settings for web automation and testing ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/chrome')" title="Click to copy">/chrome</code>
+          
+        </div>
+      </td>
+      <td>Configure Claude in Chrome settings for web automation and testing</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/chrome</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/remote-control Make session available for remote control from claude.ai /rc">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/remote-control')" title="Click to copy">/remote-control</code>
+          <div class="aliases"><code class="alias">/rc</code></div>
+        </div>
+      </td>
+      <td>Make session available for remote control from claude.ai</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/remote-control</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="output" class="content-section">
+    <h2 class="section-heading" style="--accent:#1A6B4A">
+      <span class="section-icon">↗</span>Export &amp; Output
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/export Export current conversation as plain text. With filename writes to file; without opens copy/save dialog ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/export')" title="Click to copy">/export</code>
+          
+        </div>
+      </td>
+      <td>Export current conversation as plain text. With filename writes to file; without opens copy/save dialog</td>
+      <td><code class="args">[filename]</code></td>
+      <td><code class="example-cmd">/export session-notes.txt</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/copy Copy last assistant response to clipboard. Pass N to copy Nth-latest. Press w in picker to write to file ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/copy')" title="Click to copy">/copy</code>
+          
+        </div>
+      </td>
+      <td>Copy last assistant response to clipboard. Pass N to copy Nth-latest. Press w in picker to write to file</td>
+      <td><code class="args">[N]</code></td>
+      <td><code class="example-cmd">/copy 2</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/status Show version, model, account, and connectivity status. Works while Claude is responding ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/status')" title="Click to copy">/status</code>
+          
+        </div>
+      </td>
+      <td>Show version, model, account, and connectivity status. Works while Claude is responding</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/status</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/cost Show token usage statistics and subscription billing details ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/cost')" title="Click to copy">/cost</code>
+          
+        </div>
+      </td>
+      <td>Show token usage statistics and subscription billing details</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/cost</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/usage Show plan usage limits and rate limit status ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/usage')" title="Click to copy">/usage</code>
+          
+        </div>
+      </td>
+      <td>Show plan usage limits and rate limit status</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/usage</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/insights Generate report analyzing your Claude Code sessions — project areas, interaction patterns, friction points ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/insights')" title="Click to copy">/insights</code>
+          
+        </div>
+      </td>
+      <td>Generate report analyzing your Claude Code sessions — project areas, interaction patterns, friction points</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/insights</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/stats Visualize daily usage, session history, streaks, model preferences ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/stats')" title="Click to copy">/stats</code>
+          
+        </div>
+      </td>
+      <td>Visualize daily usage, session history, streaks, model preferences</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/stats</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="account" class="content-section">
+    <h2 class="section-heading" style="--accent:#4A4A8A">
+      <span class="section-icon">◉</span>Account &amp; System
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/login Sign in to your Anthropic account ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/login')" title="Click to copy">/login</code>
+          
+        </div>
+      </td>
+      <td>Sign in to your Anthropic account</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/login</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/logout Sign out from your Anthropic account ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/logout')" title="Click to copy">/logout</code>
+          
+        </div>
+      </td>
+      <td>Sign out from your Anthropic account</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/logout</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/doctor Diagnose and verify Claude Code installation and settings ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/doctor')" title="Click to copy">/doctor</code>
+          
+        </div>
+      </td>
+      <td>Diagnose and verify Claude Code installation and settings</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/doctor</code></td>
+      <td class="notes-cell">Run first when something feels off</td>
+    </tr>
+    <tr data-search="/feedback Submit feedback or bug reports about Claude Code /bug">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/feedback')" title="Click to copy">/feedback</code>
+          <div class="aliases"><code class="alias">/bug</code></div>
+        </div>
+      </td>
+      <td>Submit feedback or bug reports about Claude Code</td>
+      <td><code class="args">[feedback text]</code></td>
+      <td><code class="example-cmd">/feedback the diff viewer sometimes freezes on large files</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/release-notes View full changelog with most recent version first ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/release-notes')" title="Click to copy">/release-notes</code>
+          
+        </div>
+      </td>
+      <td>View full changelog with most recent version first</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/release-notes</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/upgrade Open upgrade page to switch to a higher plan tier ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/upgrade')" title="Click to copy">/upgrade</code>
+          
+        </div>
+      </td>
+      <td>Open upgrade page to switch to a higher plan tier</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/upgrade</code></td>
+      <td class="notes-cell">Pro/Max plans</td>
+    </tr>
+    <tr data-search="/install-github-app Set up Claude GitHub Actions app — walks through repo selection and configuration ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/install-github-app')" title="Click to copy">/install-github-app</code>
+          
+        </div>
+      </td>
+      <td>Set up Claude GitHub Actions app — walks through repo selection and configuration</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/install-github-app</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/install-slack-app Install Claude Slack app — opens browser for OAuth flow ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/install-slack-app')" title="Click to copy">/install-slack-app</code>
+          
+        </div>
+      </td>
+      <td>Install Claude Slack app — opens browser for OAuth flow</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/install-slack-app</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/powerup Discover Claude Code features through quick interactive lessons with animated demos ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/powerup')" title="Click to copy">/powerup</code>
+          
+        </div>
+      </td>
+      <td>Discover Claude Code features through quick interactive lessons with animated demos</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/powerup</code></td>
+      <td class="notes-cell">Great for onboarding</td>
+    </tr>
+    <tr data-search="/stickers Order Claude Code stickers ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/stickers')" title="Click to copy">/stickers</code>
+          
+        </div>
+      </td>
+      <td>Order Claude Code stickers</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/stickers</code></td>
+      <td class="notes-cell"></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+  <section id="skills" class="content-section">
+    <h2 class="section-heading" style="--accent:#B45309">
+      <span class="section-icon">◆</span>Bundled Skills
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Usage</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+    <tr data-search="/batch Orchestrate large-scale changes in parallel across your codebase. Researches → decomposes into 5–30 units → presents plan → spawns parallel agents in git worktrees ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/batch')" title="Click to copy">/batch</code>
+          
+        </div>
+      </td>
+      <td>Orchestrate large-scale changes in parallel across your codebase. Researches → decomposes into 5–30 units → presents plan → spawns parallel agents in git worktrees</td>
+      <td><code class="args">&lt;instruction&gt;</code></td>
+      <td><code class="example-cmd">/batch migrate all React class components to hooks</code></td>
+      <td class="notes-cell">Requires git repo</td>
+    </tr>
+    <tr data-search="/debug Enable debug logging and troubleshoot issues by reading the session debug log ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/debug')" title="Click to copy">/debug</code>
+          
+        </div>
+      </td>
+      <td>Enable debug logging and troubleshoot issues by reading the session debug log</td>
+      <td><code class="args">[description]</code></td>
+      <td><code class="example-cmd">/debug why is the API returning 403 on login</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/loop Run a prompt repeatedly on an interval while the session stays open. Useful for polling deploys ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/loop')" title="Click to copy">/loop</code>
+          
+        </div>
+      </td>
+      <td>Run a prompt repeatedly on an interval while the session stays open. Useful for polling deploys</td>
+      <td><code class="args">[interval] &lt;prompt&gt;</code></td>
+      <td><code class="example-cmd">/loop 5m check if the deploy finished</code></td>
+      <td class="notes-cell">Default interval: 10m</td>
+    </tr>
+    <tr data-search="/simplify Review recently changed files for code reuse, quality, and efficiency. Spawns 3 review agents in parallel ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/simplify')" title="Click to copy">/simplify</code>
+          
+        </div>
+      </td>
+      <td>Review recently changed files for code reuse, quality, and efficiency. Spawns 3 review agents in parallel</td>
+      <td><code class="args">[focus]</code></td>
+      <td><code class="example-cmd">/simplify focus on the database layer</code></td>
+      <td class="notes-cell"></td>
+    </tr>
+    <tr data-search="/claude-api Load Claude API reference (Python, TS, Java, Go, Ruby, C#, PHP, cURL) and Agent SDK refs. Covers tool use, streaming, batches, structured outputs ">
+      <td>
+        <div class="cmd-cell">
+          <code class="cmd-pill" onclick="copyCmd('/claude-api')" title="Click to copy">/claude-api</code>
+          
+        </div>
+      </td>
+      <td>Load Claude API reference (Python, TS, Java, Go, Ruby, C#, PHP, cURL) and Agent SDK refs. Covers tool use, streaming, batches, structured outputs</td>
+      <td><span class="muted-dash">—</span></td>
+      <td><code class="example-cmd">/claude-api</code></td>
+      <td class="notes-cell">Auto-activates when code imports anthropic</td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+
+  <section id="shortcuts" class="content-section">
+    <h2 class="section-heading" style="--accent:#79c0ff">
+      <span class="section-icon">&#9000;</span>Keyboard Shortcuts
+    </h2>
+    
+    <h3 class="sub-heading">General Controls</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="Ctrl+C Cancel current input or generation">
+            <td class="kbd-cell"><kbd>Ctrl+C</kbd></td>
+            <td>Cancel current input or generation</td>
+          </tr>
+          <tr data-search="Ctrl+D Exit Claude Code (EOF)">
+            <td class="kbd-cell"><kbd>Ctrl+D</kbd></td>
+            <td>Exit Claude Code (EOF)</td>
+          </tr>
+          <tr data-search="Ctrl+L Redraw screen without clearing history">
+            <td class="kbd-cell"><kbd>Ctrl+L</kbd></td>
+            <td>Redraw screen without clearing history</td>
+          </tr>
+          <tr data-search="Ctrl+O Toggle verbose output (shows detailed tool usage)">
+            <td class="kbd-cell"><kbd>Ctrl+O</kbd></td>
+            <td>Toggle verbose output (shows detailed tool usage)</td>
+          </tr>
+          <tr data-search="Ctrl+R Reverse search command history">
+            <td class="kbd-cell"><kbd>Ctrl+R</kbd></td>
+            <td>Reverse search command history</td>
+          </tr>
+          <tr data-search="Ctrl+G Ctrl+X Ctrl+E Open current prompt in default text editor">
+            <td class="kbd-cell"><kbd>Ctrl+G</kbd> <span class="key-sep">or</span> <kbd>Ctrl+X Ctrl+E</kbd></td>
+            <td>Open current prompt in default text editor</td>
+          </tr>
+          <tr data-search="Ctrl+V Cmd+V Paste image from clipboard">
+            <td class="kbd-cell"><kbd>Ctrl+V</kbd> <span class="key-sep">or</span> <kbd>Cmd+V</kbd></td>
+            <td>Paste image from clipboard</td>
+          </tr>
+          <tr data-search="Ctrl+B Background a running task (press twice on tmux)">
+            <td class="kbd-cell"><kbd>Ctrl+B</kbd></td>
+            <td>Background a running task (press twice on tmux)</td>
+          </tr>
+          <tr data-search="Ctrl+T Toggle task list in terminal status area">
+            <td class="kbd-cell"><kbd>Ctrl+T</kbd></td>
+            <td>Toggle task list in terminal status area</td>
+          </tr>
+          <tr data-search="Ctrl+X Ctrl+K Kill all background agents (press twice within 3s to confirm)">
+            <td class="kbd-cell"><kbd>Ctrl+X Ctrl+K</kbd></td>
+            <td>Kill all background agents (press twice within 3s to confirm)</td>
+          </tr>
+          <tr data-search="Shift+Tab Alt+M Cycle permission modes: default → acceptEdits → plan → auto/bypassPermissions">
+            <td class="kbd-cell"><kbd>Shift+Tab</kbd> <span class="key-sep">or</span> <kbd>Alt+M</kbd></td>
+            <td>Cycle permission modes: default → acceptEdits → plan → auto/bypassPermissions</td>
+          </tr>
+          <tr data-search="Option+P Alt+P Switch model without clearing your current prompt">
+            <td class="kbd-cell"><kbd>Option+P</kbd> <span class="key-sep">or</span> <kbd>Alt+P</kbd></td>
+            <td>Switch model without clearing your current prompt</td>
+          </tr>
+          <tr data-search="Option+T Alt+T Toggle extended thinking mode">
+            <td class="kbd-cell"><kbd>Option+T</kbd> <span class="key-sep">or</span> <kbd>Alt+T</kbd></td>
+            <td>Toggle extended thinking mode</td>
+          </tr>
+          <tr data-search="Option+O Alt+O Toggle fast mode">
+            <td class="kbd-cell"><kbd>Option+O</kbd> <span class="key-sep">or</span> <kbd>Alt+O</kbd></td>
+            <td>Toggle fast mode</td>
+          </tr>
+          <tr data-search="Esc Esc Rewind / summarize conversation">
+            <td class="kbd-cell"><kbd>Esc Esc</kbd></td>
+            <td>Rewind / summarize conversation</td>
+          </tr>
+          <tr data-search="Hold Space Push-to-talk voice dictation (if voice enabled)">
+            <td class="kbd-cell"><kbd>Hold Space</kbd></td>
+            <td>Push-to-talk voice dictation (if voice enabled)</td>
+          </tr></tbody>
+      </table>
+    </div>
+    <h3 class="sub-heading">Text Editing</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="Ctrl+K Delete to end of line (stores for paste)">
+            <td class="kbd-cell"><kbd>Ctrl+K</kbd></td>
+            <td>Delete to end of line (stores for paste)</td>
+          </tr>
+          <tr data-search="Ctrl+U Delete from cursor to line start">
+            <td class="kbd-cell"><kbd>Ctrl+U</kbd></td>
+            <td>Delete from cursor to line start</td>
+          </tr>
+          <tr data-search="Ctrl+Y Paste deleted text">
+            <td class="kbd-cell"><kbd>Ctrl+Y</kbd></td>
+            <td>Paste deleted text</td>
+          </tr>
+          <tr data-search="Alt+Y Cycle paste history (after Ctrl+Y)">
+            <td class="kbd-cell"><kbd>Alt+Y</kbd></td>
+            <td>Cycle paste history (after Ctrl+Y)</td>
+          </tr>
+          <tr data-search="Alt+B Move cursor back one word">
+            <td class="kbd-cell"><kbd>Alt+B</kbd></td>
+            <td>Move cursor back one word</td>
+          </tr>
+          <tr data-search="Alt+F Move cursor forward one word">
+            <td class="kbd-cell"><kbd>Alt+F</kbd></td>
+            <td>Move cursor forward one word</td>
+          </tr></tbody>
+      </table>
+    </div>
+    <h3 class="sub-heading">Multiline Input</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="\ + Enter New line (works in all terminals)">
+            <td class="kbd-cell"><kbd>\ + Enter</kbd></td>
+            <td>New line (works in all terminals)</td>
+          </tr>
+          <tr data-search="Option+Enter New line (macOS default)">
+            <td class="kbd-cell"><kbd>Option+Enter</kbd></td>
+            <td>New line (macOS default)</td>
+          </tr>
+          <tr data-search="Shift+Enter New line (iTerm2, WezTerm, Ghostty, Kitty)">
+            <td class="kbd-cell"><kbd>Shift+Enter</kbd></td>
+            <td>New line (iTerm2, WezTerm, Ghostty, Kitty)</td>
+          </tr>
+          <tr data-search="Ctrl+J New line (line feed — works everywhere)">
+            <td class="kbd-cell"><kbd>Ctrl+J</kbd></td>
+            <td>New line (line feed — works everywhere)</td>
+          </tr></tbody>
+      </table>
+    </div>
+    <h3 class="sub-heading">Vim Mode — Mode Switching</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="Esc Enter NORMAL mode">
+            <td class="kbd-cell"><kbd>Esc</kbd></td>
+            <td>Enter NORMAL mode</td>
+          </tr>
+          <tr data-search="i Insert before cursor">
+            <td class="kbd-cell"><kbd>i</kbd></td>
+            <td>Insert before cursor</td>
+          </tr>
+          <tr data-search="I Insert at beginning of line">
+            <td class="kbd-cell"><kbd>I</kbd></td>
+            <td>Insert at beginning of line</td>
+          </tr>
+          <tr data-search="a Insert after cursor">
+            <td class="kbd-cell"><kbd>a</kbd></td>
+            <td>Insert after cursor</td>
+          </tr>
+          <tr data-search="A Insert at end of line">
+            <td class="kbd-cell"><kbd>A</kbd></td>
+            <td>Insert at end of line</td>
+          </tr>
+          <tr data-search="o Open new line below">
+            <td class="kbd-cell"><kbd>o</kbd></td>
+            <td>Open new line below</td>
+          </tr>
+          <tr data-search="O Open new line above">
+            <td class="kbd-cell"><kbd>O</kbd></td>
+            <td>Open new line above</td>
+          </tr></tbody>
+      </table>
+    </div>
+    <h3 class="sub-heading">Vim Mode — Navigation</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="h/j/k/l Move left/down/up/right">
+            <td class="kbd-cell"><kbd>h/j/k/l</kbd></td>
+            <td>Move left/down/up/right</td>
+          </tr>
+          <tr data-search="w Next word">
+            <td class="kbd-cell"><kbd>w</kbd></td>
+            <td>Next word</td>
+          </tr>
+          <tr data-search="e End of word">
+            <td class="kbd-cell"><kbd>e</kbd></td>
+            <td>End of word</td>
+          </tr>
+          <tr data-search="b Previous word">
+            <td class="kbd-cell"><kbd>b</kbd></td>
+            <td>Previous word</td>
+          </tr>
+          <tr data-search="0 Beginning of line">
+            <td class="kbd-cell"><kbd>0</kbd></td>
+            <td>Beginning of line</td>
+          </tr>
+          <tr data-search="$ End of line">
+            <td class="kbd-cell"><kbd>$</kbd></td>
+            <td>End of line</td>
+          </tr>
+          <tr data-search="^ First non-blank character">
+            <td class="kbd-cell"><kbd>^</kbd></td>
+            <td>First non-blank character</td>
+          </tr>
+          <tr data-search="gg Beginning of input">
+            <td class="kbd-cell"><kbd>gg</kbd></td>
+            <td>Beginning of input</td>
+          </tr>
+          <tr data-search="G End of input">
+            <td class="kbd-cell"><kbd>G</kbd></td>
+            <td>End of input</td>
+          </tr>
+          <tr data-search="f{char} Jump to next occurrence of character">
+            <td class="kbd-cell"><kbd>f{char}</kbd></td>
+            <td>Jump to next occurrence of character</td>
+          </tr>
+          <tr data-search="F{char} Jump to previous occurrence">
+            <td class="kbd-cell"><kbd>F{char}</kbd></td>
+            <td>Jump to previous occurrence</td>
+          </tr>
+          <tr data-search="; Repeat last f/F/t/T motion">
+            <td class="kbd-cell"><kbd>;</kbd></td>
+            <td>Repeat last f/F/t/T motion</td>
+          </tr>
+          <tr data-search=", Repeat last f/F/t/T in reverse">
+            <td class="kbd-cell"><kbd>,</kbd></td>
+            <td>Repeat last f/F/t/T in reverse</td>
+          </tr></tbody>
+      </table>
+    </div>
+    <h3 class="sub-heading">Vim Mode — Editing</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shortcut</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr data-search="x Delete character">
+            <td class="kbd-cell"><kbd>x</kbd></td>
+            <td>Delete character</td>
+          </tr>
+          <tr data-search="dd Delete line">
+            <td class="kbd-cell"><kbd>dd</kbd></td>
+            <td>Delete line</td>
+          </tr>
+          <tr data-search="D Delete to end of line">
+            <td class="kbd-cell"><kbd>D</kbd></td>
+            <td>Delete to end of line</td>
+          </tr>
+          <tr data-search="cc Change line">
+            <td class="kbd-cell"><kbd>cc</kbd></td>
+            <td>Change line</td>
+          </tr>
+          <tr data-search="C Change to end of line">
+            <td class="kbd-cell"><kbd>C</kbd></td>
+            <td>Change to end of line</td>
+          </tr>
+          <tr data-search="yy Y Yank (copy) line">
+            <td class="kbd-cell"><kbd>yy</kbd> <span class="key-sep">or</span> <kbd>Y</kbd></td>
+            <td>Yank (copy) line</td>
+          </tr>
+          <tr data-search="p Paste after cursor">
+            <td class="kbd-cell"><kbd>p</kbd></td>
+            <td>Paste after cursor</td>
+          </tr>
+          <tr data-search="P Paste before cursor">
+            <td class="kbd-cell"><kbd>P</kbd></td>
+            <td>Paste before cursor</td>
+          </tr>
+          <tr data-search="&gt;&gt; Indent line">
+            <td class="kbd-cell"><kbd>&gt;&gt;</kbd></td>
+            <td>Indent line</td>
+          </tr>
+          <tr data-search="&lt;&lt; Dedent line">
+            <td class="kbd-cell"><kbd>&lt;&lt;</kbd></td>
+            <td>Dedent line</td>
+          </tr>
+          <tr data-search="J Join lines">
+            <td class="kbd-cell"><kbd>J</kbd></td>
+            <td>Join lines</td>
+          </tr>
+          <tr data-search=". Repeat last change">
+            <td class="kbd-cell"><kbd>.</kbd></td>
+            <td>Repeat last change</td>
+          </tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="permission-modes" class="content-section">
+    <h2 class="section-heading" style="--accent:#bc8cff">
+      <span class="section-icon">&#8859;</span>Permission Modes
+    </h2>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Cycle through modes with <kbd>Shift+Tab</kbd>. The mode you pick determines how much Claude does autonomously vs. how much requires your approval.</p>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Mode</th><th>Cycle Key</th><th>Behavior</th><th>Risk</th></tr></thead>
+      <tbody>
+    <tr data-search="default Claude asks permission before each action. Safest for new projects.">
+      <td><code class="mode-pill mode-default">default</code></td>
+      <td><kbd>Shift+Tab ×1</kbd></td>
+      <td>Claude asks permission before each action. Safest for new projects.</td>
+      <td><span class="badge badge-green">low</span></td>
+    </tr>
+    <tr data-search="acceptEdits Claude auto-accepts file edits without prompting. Still asks for shell commands.">
+      <td><code class="mode-pill mode-acceptEdits">acceptEdits</code></td>
+      <td><kbd>Shift+Tab ×2</kbd></td>
+      <td>Claude auto-accepts file edits without prompting. Still asks for shell commands.</td>
+      <td><span class="badge badge-yellow">medium</span></td>
+    </tr>
+    <tr data-search="plan Claude drafts all changes in plan mode for your review before any execution.">
+      <td><code class="mode-pill mode-plan">plan</code></td>
+      <td><kbd>Shift+Tab ×3</kbd></td>
+      <td>Claude drafts all changes in plan mode for your review before any execution.</td>
+      <td><span class="badge badge-green">low</span></td>
+    </tr>
+    <tr data-search="auto ML classifier auto-approves safe operations. Still requires approval for dangerous actions.">
+      <td><code class="mode-pill mode-auto">auto</code></td>
+      <td><kbd>Shift+Tab ×4</kbd></td>
+      <td>ML classifier auto-approves safe operations. Still requires approval for dangerous actions.<div class="requires">Requires: Team/Enterprise/API plan + Sonnet 4.6+ or Opus 4.6</div></td>
+      <td><span class="badge badge-yellow">medium</span></td>
+    </tr>
+    <tr data-search="bypassPermissions Skip all permission prompts. Use only in sandboxed/trusted environments.">
+      <td><code class="mode-pill mode-bypassPermissions">bypassPermissions</code></td>
+      <td><kbd>Shift+Tab ×5</kbd></td>
+      <td>Skip all permission prompts. Use only in sandboxed/trusted environments.</td>
+      <td><span class="badge badge-red">high</span></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+
+  <section id="input-prefixes" class="content-section">
+    <h2 class="section-heading" style="--accent:#ffa657">
+      <span class="section-icon">&#10095;</span>Special Input Prefixes
+    </h2>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prefix</th><th>What it does</th></tr></thead>
+      <tbody>
+    <tr data-search="/ Command and skill autocomplete — see the full command menu">
+      <td><code class="prefix-pill">/</code></td>
+      <td>Command and skill autocomplete — see the full command menu</td>
+    </tr>
+    <tr data-search="! Bash mode — run shell commands directly. Output added to conversation context. Supports Tab autocomplete and Ctrl+B backgrounding">
+      <td><code class="prefix-pill">!</code></td>
+      <td>Bash mode — run shell commands directly. Output added to conversation context. Supports Tab autocomplete and Ctrl+B backgrounding</td>
+    </tr>
+    <tr data-search="@ File path mention — triggers autocomplete for files in your working directory">
+      <td><code class="prefix-pill">@</code></td>
+      <td>File path mention — triggers autocomplete for files in your working directory</td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+
+  <section id="cli-flags" class="content-section">
+    <h2 class="section-heading" style="--accent:#3fb950">
+      <span class="section-icon">&#9873;</span>CLI Flags
+    </h2>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Flags for the <code style="font-family:var(--font-mono);color:var(--accent)">claude</code> startup command. Combine freely.</p>
+    
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Flag</th><th>Description</th><th>Example</th></tr></thead>
+      <tbody>
+    <tr data-search="-p, --print Print response without interactive mode (SDK/scripting mode)">
+      <td><code class="flag-pill">-p, --print</code></td>
+      <td>Print response without interactive mode (SDK/scripting mode)</td>
+      <td><code class="example">claude -p &quot;what does this do?&quot;</code></td>
+    </tr>
+    <tr data-search="-c, --continue Continue most recent conversation in current directory">
+      <td><code class="flag-pill">-c, --continue</code></td>
+      <td>Continue most recent conversation in current directory</td>
+      <td><code class="example">claude -c</code></td>
+    </tr>
+    <tr data-search="-r, --resume Resume specific session by ID or name">
+      <td><code class="flag-pill">-r, --resume</code></td>
+      <td>Resume specific session by ID or name</td>
+      <td><code class="example">claude -r &quot;my-task&quot;</code></td>
+    </tr>
+    <tr data-search="-n, --name Set display name for this session">
+      <td><code class="flag-pill">-n, --name</code></td>
+      <td>Set display name for this session</td>
+      <td><code class="example">claude -n &quot;auth-refactor&quot;</code></td>
+    </tr>
+    <tr data-search="-w, --worktree Start in an isolated git worktree branch">
+      <td><code class="flag-pill">-w, --worktree</code></td>
+      <td>Start in an isolated git worktree branch</td>
+      <td><code class="example">claude -w feature-x</code></td>
+    </tr>
+    <tr data-search="--model Set model at startup (aliases: sonnet, opus)">
+      <td><code class="flag-pill">--model</code></td>
+      <td>Set model at startup (aliases: sonnet, opus)</td>
+      <td><code class="example">claude --model opus</code></td>
+    </tr>
+    <tr data-search="--effort Set effort level at startup">
+      <td><code class="flag-pill">--effort</code></td>
+      <td>Set effort level at startup</td>
+      <td><code class="example">claude --effort high</code></td>
+    </tr>
+    <tr data-search="--permission-mode Begin in a specific permission mode">
+      <td><code class="flag-pill">--permission-mode</code></td>
+      <td>Begin in a specific permission mode</td>
+      <td><code class="example">claude --permission-mode plan</code></td>
+    </tr>
+    <tr data-search="--remote Create a web session on claude.ai">
+      <td><code class="flag-pill">--remote</code></td>
+      <td>Create a web session on claude.ai</td>
+      <td><code class="example">claude --remote &quot;Fix auth bug&quot;</code></td>
+    </tr>
+    <tr data-search="--ide Auto-connect to IDE if available">
+      <td><code class="flag-pill">--ide</code></td>
+      <td>Auto-connect to IDE if available</td>
+      <td><code class="example">claude --ide</code></td>
+    </tr>
+    <tr data-search="--add-dir Grant file access to additional directories at startup">
+      <td><code class="flag-pill">--add-dir</code></td>
+      <td>Grant file access to additional directories at startup</td>
+      <td><code class="example">claude --add-dir ../shared-lib</code></td>
+    </tr>
+    <tr data-search="--system-prompt Replace the entire system prompt">
+      <td><code class="flag-pill">--system-prompt</code></td>
+      <td>Replace the entire system prompt</td>
+      <td><code class="example">claude --system-prompt &quot;You are...&quot;</code></td>
+    </tr>
+    <tr data-search="--append-system-prompt Append to the default system prompt">
+      <td><code class="flag-pill">--append-system-prompt</code></td>
+      <td>Append to the default system prompt</td>
+      <td><code class="example">claude --append-system-prompt &quot;Always use TypeScript&quot;</code></td>
+    </tr>
+    <tr data-search="--chrome Enable Chrome browser integration">
+      <td><code class="flag-pill">--chrome</code></td>
+      <td>Enable Chrome browser integration</td>
+      <td><code class="example">claude --chrome</code></td>
+    </tr>
+    <tr data-search="--verbose Enable verbose logging">
+      <td><code class="flag-pill">--verbose</code></td>
+      <td>Enable verbose logging</td>
+      <td><code class="example">claude --verbose</code></td>
+    </tr>
+    <tr data-search="--debug Enable debug mode with optional filters">
+      <td><code class="flag-pill">--debug</code></td>
+      <td>Enable debug mode with optional filters</td>
+      <td><code class="example">claude --debug &quot;api,mcp&quot;</code></td>
+    </tr>
+    <tr data-search="--bare Skip auto-discovery for faster startup (use with -p)">
+      <td><code class="flag-pill">--bare</code></td>
+      <td>Skip auto-discovery for faster startup (use with -p)</td>
+      <td><code class="example">claude --bare -p &quot;query&quot;</code></td>
+    </tr>
+    <tr data-search="-v, --version Show current version">
+      <td><code class="flag-pill">-v, --version</code></td>
+      <td>Show current version</td>
+      <td><code class="example">claude -v</code></td>
+    </tr>
+    <tr data-search="--help Show help">
+      <td><code class="flag-pill">--help</code></td>
+      <td>Show help</td>
+      <td><code class="example">claude --help</code></td>
+    </tr></tbody>
+    </table>
+  </div>
+  </section>
+
+  <section id="changelog" class="content-section">
+    <h2 class="section-heading" style="--accent:#f85149">
+      <span class="section-icon">&#8635;</span>Auto-Update Changelog
+    </h2>
+    <p class="muted">No updates recorded yet — the GitHub Actions workflow will populate this automatically when a new Claude Code version is released.</p>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">Copied!</div>
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">&#8593;</button>
+
+<script>
+const root = document.documentElement;
+const saved = localStorage.getItem('theme') || 'dark';
+if (saved === 'light') root.setAttribute('data-theme', 'light');
+
+function toggleTheme() {
+  const isLight = root.getAttribute('data-theme') === 'light';
+  root.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  localStorage.setItem('theme', isLight ? 'dark' : 'light');
+}
+
+function copyCmd(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('Copied: ' + text));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function handleSearch(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('tr[data-search]').forEach(row => {
+    row.classList.toggle('hidden', !!q && !row.dataset.search.toLowerCase().includes(q));
+  });
+  document.querySelectorAll('.qs-card').forEach(card => {
+    card.style.display = (!q || card.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+document.querySelectorAll('.content-section').forEach(s => observer.observe(s));
+
+function toggleDrawer() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeDrawer() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+});
+</script>
+</body>
+</html>
