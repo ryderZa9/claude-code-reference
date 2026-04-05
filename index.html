@@ -238,8 +238,8 @@ kbd {
 <header class="header">
   <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
-  <span class="header-version">v1.0.0</span>
-  <span class="header-updated">Updated 2026-04-04</span>
+  <span class="header-version">v2.1.92</span>
+  <span class="header-updated">Updated 2026-04-05</span>
 
   <div class="search-wrap">
     <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
@@ -267,8 +267,8 @@ kbd {
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
     <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
-      <span class="hero-chip">v1.0.0</span>
-      <span class="hero-chip">Updated 2026-04-04</span>
+      <span class="hero-chip">v2.1.92</span>
+      <span class="hero-chip">Updated 2026-04-05</span>
       <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
@@ -1704,7 +1704,18 @@ kbd {
     <h2 class="section-heading" style="--accent:#f85149">
       <span class="section-icon">↻</span>Auto-Update Changelog
     </h2>
-    <p class="muted">No updates recorded yet — the workflow will populate this automatically when a new Claude Code version is released.</p>
+    
+    <div class="changelog-entry">
+      <div class="changelog-header">
+        <span class="changelog-version">v2.1.92</span>
+        <span class="changelog-date">2026-04-05</span>
+        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.92" target="_blank" rel="noopener">Release notes ↗</a>
+      </div>
+      
+        <ul class="changelog-changes">
+          <li><span class="change-type change-new">new</span> Added per-model and cache-hit breakdown to `/cost` for subscription users</li><li><span class="change-type change-updated">updated</span> `/release-notes` is now an interactive version picker</li><li><span class="change-type change-fix">fix</span> Fixed tool input validation failures when streaming emits array/object fields as JSON-encoded strings</li><li><span class="change-type change-fix">fix</span> Fixed idle-return &quot;/clear to save X tokens&quot; hint showing cumulative session tokens instead of current context size</li><li><span class="change-type change-removed">removed</span> Removed `/tag` command</li><li><span class="change-type change-removed">removed</span> Removed `/vim` command (toggle vim mode via `/config` → Editor mode)</li>
+        </ul>
+    </div>
   </section>
 
 </main>

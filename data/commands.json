@@ -3,19 +3,49 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-04"
+    "last_updated": "2026-04-05"
   },
   "quick_start": [
-    { "command": "/plan", "why": "Enter plan mode — Claude proposes changes for your review before touching anything. Use this for every non-trivial task." },
-    { "command": "/init", "why": "Bootstraps CLAUDE.md in your project so Claude understands your codebase rules, stack, and preferences from day one." },
-    { "command": "/memory", "why": "Edit your persistent memory files. What Claude remembers across sessions lives here." },
-    { "command": "/compact", "why": "Compress the conversation when context gets long. Keeps Claude sharp without starting over." },
-    { "command": "/diff", "why": "Interactive viewer for all uncommitted changes. Browse per-turn diffs with arrow keys." },
-    { "command": "/permissions", "why": "Control exactly what Claude can do automatically vs. what requires your approval." },
-    { "command": "/mcp", "why": "Connect external tools — Slack, Jira, Google Drive, GitHub — into Claude's context." },
-    { "command": "/batch", "why": "Spawn parallel agents to execute large-scale changes across your codebase simultaneously." },
-    { "command": "/cost", "why": "See token usage and spending at any point. Stay on top of your budget." },
-    { "command": "/doctor", "why": "Diagnose installation issues instantly. Run this first when something feels off." }
+    {
+      "command": "/plan",
+      "why": "Enter plan mode — Claude proposes changes for your review before touching anything. Use this for every non-trivial task."
+    },
+    {
+      "command": "/init",
+      "why": "Bootstraps CLAUDE.md in your project so Claude understands your codebase rules, stack, and preferences from day one."
+    },
+    {
+      "command": "/memory",
+      "why": "Edit your persistent memory files. What Claude remembers across sessions lives here."
+    },
+    {
+      "command": "/compact",
+      "why": "Compress the conversation when context gets long. Keeps Claude sharp without starting over."
+    },
+    {
+      "command": "/diff",
+      "why": "Interactive viewer for all uncommitted changes. Browse per-turn diffs with arrow keys."
+    },
+    {
+      "command": "/permissions",
+      "why": "Control exactly what Claude can do automatically vs. what requires your approval."
+    },
+    {
+      "command": "/mcp",
+      "why": "Connect external tools — Slack, Jira, Google Drive, GitHub — into Claude's context."
+    },
+    {
+      "command": "/batch",
+      "why": "Spawn parallel agents to execute large-scale changes across your codebase simultaneously."
+    },
+    {
+      "command": "/cost",
+      "why": "See token usage and spending at any point. Stay on top of your budget."
+    },
+    {
+      "command": "/doctor",
+      "why": "Diagnose installation issues instantly. Run this first when something feels off."
+    }
   ],
   "sections": [
     {
@@ -24,13 +54,73 @@
       "icon": "⟳",
       "color": "#6C8EBF",
       "commands": [
-        { "command": "/clear", "aliases": ["/reset", "/new"], "description": "Clear conversation history and free up context window", "usage": "", "example": "/clear", "notes": "" },
-        { "command": "/resume", "aliases": ["/continue"], "description": "Resume a conversation by ID or name, or open interactive picker", "usage": "[session ID or name]", "example": "/resume auth-refactor", "notes": "" },
-        { "command": "/branch", "aliases": ["/fork"], "description": "Create a branch of the current conversation at this point to explore a different approach", "usage": "[branch name]", "example": "/branch try-approach-b", "notes": "" },
-        { "command": "/rename", "aliases": [], "description": "Rename the current session. Auto-generates name from history if no name given", "usage": "[name]", "example": "/rename auth-refactor", "notes": "" },
-        { "command": "/rewind", "aliases": ["/checkpoint"], "description": "Rewind conversation and code to a previous point, or summarize from a selected message", "usage": "", "example": "/rewind", "notes": "" },
-        { "command": "/btw", "aliases": [], "description": "Ask a quick side question without adding to conversation history. Full context visibility, no tool access, low cost", "usage": "<question>", "example": "/btw what does this function actually return?", "notes": "Single response only — no follow-ups" },
-        { "command": "/exit", "aliases": ["/quit"], "description": "Exit Claude Code", "usage": "", "example": "/exit", "notes": "" }
+        {
+          "command": "/clear",
+          "aliases": [
+            "/reset",
+            "/new"
+          ],
+          "description": "Clear conversation history and free up context window",
+          "usage": "",
+          "example": "/clear",
+          "notes": ""
+        },
+        {
+          "command": "/resume",
+          "aliases": [
+            "/continue"
+          ],
+          "description": "Resume a conversation by ID or name, or open interactive picker",
+          "usage": "[session ID or name]",
+          "example": "/resume auth-refactor",
+          "notes": ""
+        },
+        {
+          "command": "/branch",
+          "aliases": [
+            "/fork"
+          ],
+          "description": "Create a branch of the current conversation at this point to explore a different approach",
+          "usage": "[branch name]",
+          "example": "/branch try-approach-b",
+          "notes": ""
+        },
+        {
+          "command": "/rename",
+          "aliases": [],
+          "description": "Rename the current session. Auto-generates name from history if no name given",
+          "usage": "[name]",
+          "example": "/rename auth-refactor",
+          "notes": ""
+        },
+        {
+          "command": "/rewind",
+          "aliases": [
+            "/checkpoint"
+          ],
+          "description": "Rewind conversation and code to a previous point, or summarize from a selected message",
+          "usage": "",
+          "example": "/rewind",
+          "notes": ""
+        },
+        {
+          "command": "/btw",
+          "aliases": [],
+          "description": "Ask a quick side question without adding to conversation history. Full context visibility, no tool access, low cost",
+          "usage": "<question>",
+          "example": "/btw what does this function actually return?",
+          "notes": "Single response only — no follow-ups"
+        },
+        {
+          "command": "/exit",
+          "aliases": [
+            "/quit"
+          ],
+          "description": "Exit Claude Code",
+          "usage": "",
+          "example": "/exit",
+          "notes": ""
+        }
       ]
     },
     {
@@ -39,16 +129,88 @@
       "icon": "⚙",
       "color": "#82B366",
       "commands": [
-        { "command": "/config", "aliases": ["/settings"], "description": "Open Settings interface — theme, model, output style, preferences", "usage": "", "example": "/config", "notes": "" },
-        { "command": "/theme", "aliases": [], "description": "Change color theme (light/dark variants, colorblind-accessible, ANSI themes)", "usage": "", "example": "/theme", "notes": "" },
-        { "command": "/color", "aliases": [], "description": "Set prompt bar color for the current session", "usage": "[red|blue|green|yellow|purple|orange|pink|cyan|default]", "example": "/color purple", "notes": "" },
-        { "command": "/model", "aliases": [], "description": "Select or change AI model. Takes effect immediately. Shortcuts: sonnet, opus", "usage": "[model name]", "example": "/model opus", "notes": "" },
-        { "command": "/effort", "aliases": [], "description": "Set model effort level. low/medium/high persist; max is session-only (Opus 4.6 only); auto resets to default", "usage": "[low|medium|high|max|auto]", "example": "/effort high", "notes": "max = Opus 4.6 only" },
-        { "command": "/fast", "aliases": [], "description": "Toggle fast mode on/off for quicker responses", "usage": "[on|off]", "example": "/fast on", "notes": "" },
-        { "command": "/vim", "aliases": [], "description": "Toggle Vim editing mode for the input prompt", "usage": "", "example": "/vim", "notes": "" },
-        { "command": "/keybindings", "aliases": [], "description": "Open or create keybindings configuration file at ~/.claude/keybindings.json", "usage": "", "example": "/keybindings", "notes": "" },
-        { "command": "/terminal-setup", "aliases": [], "description": "Configure terminal keybindings for Shift+Enter and other shortcuts", "usage": "", "example": "/terminal-setup", "notes": "Only shown for terminals that need it" },
-        { "command": "/statusline", "aliases": [], "description": "Configure the terminal status line. Describe what you want or auto-configure", "usage": "[description]", "example": "/statusline show git branch and model name", "notes": "" }
+        {
+          "command": "/config",
+          "aliases": [
+            "/settings"
+          ],
+          "description": "Open Settings interface — theme, model, output style, preferences",
+          "usage": "",
+          "example": "/config",
+          "notes": ""
+        },
+        {
+          "command": "/theme",
+          "aliases": [],
+          "description": "Change color theme (light/dark variants, colorblind-accessible, ANSI themes)",
+          "usage": "",
+          "example": "/theme",
+          "notes": ""
+        },
+        {
+          "command": "/color",
+          "aliases": [],
+          "description": "Set prompt bar color for the current session",
+          "usage": "[red|blue|green|yellow|purple|orange|pink|cyan|default]",
+          "example": "/color purple",
+          "notes": ""
+        },
+        {
+          "command": "/model",
+          "aliases": [],
+          "description": "Select or change AI model. Takes effect immediately. Shortcuts: sonnet, opus",
+          "usage": "[model name]",
+          "example": "/model opus",
+          "notes": ""
+        },
+        {
+          "command": "/effort",
+          "aliases": [],
+          "description": "Set model effort level. low/medium/high persist; max is session-only (Opus 4.6 only); auto resets to default",
+          "usage": "[low|medium|high|max|auto]",
+          "example": "/effort high",
+          "notes": "max = Opus 4.6 only"
+        },
+        {
+          "command": "/fast",
+          "aliases": [],
+          "description": "Toggle fast mode on/off for quicker responses",
+          "usage": "[on|off]",
+          "example": "/fast on",
+          "notes": ""
+        },
+        {
+          "command": "/vim",
+          "aliases": [],
+          "description": "Toggle Vim editing mode for the input prompt",
+          "usage": "",
+          "example": "/vim",
+          "notes": ""
+        },
+        {
+          "command": "/keybindings",
+          "aliases": [],
+          "description": "Open or create keybindings configuration file at ~/.claude/keybindings.json",
+          "usage": "",
+          "example": "/keybindings",
+          "notes": ""
+        },
+        {
+          "command": "/terminal-setup",
+          "aliases": [],
+          "description": "Configure terminal keybindings for Shift+Enter and other shortcuts",
+          "usage": "",
+          "example": "/terminal-setup",
+          "notes": "Only shown for terminals that need it"
+        },
+        {
+          "command": "/statusline",
+          "aliases": [],
+          "description": "Configure the terminal status line. Describe what you want or auto-configure",
+          "usage": "[description]",
+          "example": "/statusline show git branch and model name",
+          "notes": ""
+        }
       ]
     },
     {
@@ -57,10 +219,38 @@
       "icon": "◈",
       "color": "#D79B00",
       "commands": [
-        { "command": "/memory", "aliases": [], "description": "Edit CLAUDE.md memory files, enable/disable auto-memory, view auto-memory entries", "usage": "", "example": "/memory", "notes": "" },
-        { "command": "/init", "aliases": [], "description": "Initialize project with CLAUDE.md guide. Set CLAUDE_CODE_NEW_INIT=1 for interactive flow with skills, hooks, memory", "usage": "", "example": "/init", "notes": "" },
-        { "command": "/context", "aliases": [], "description": "Visualize current context usage as a colored grid with optimization suggestions", "usage": "", "example": "/context", "notes": "" },
-        { "command": "/compact", "aliases": [], "description": "Compact conversation to free context. Pass focus instructions to guide what is preserved", "usage": "[focus instructions]", "example": "/compact focus on the auth flow changes", "notes": "" }
+        {
+          "command": "/memory",
+          "aliases": [],
+          "description": "Edit CLAUDE.md memory files, enable/disable auto-memory, view auto-memory entries",
+          "usage": "",
+          "example": "/memory",
+          "notes": ""
+        },
+        {
+          "command": "/init",
+          "aliases": [],
+          "description": "Initialize project with CLAUDE.md guide. Set CLAUDE_CODE_NEW_INIT=1 for interactive flow with skills, hooks, memory",
+          "usage": "",
+          "example": "/init",
+          "notes": ""
+        },
+        {
+          "command": "/context",
+          "aliases": [],
+          "description": "Visualize current context usage as a colored grid with optimization suggestions",
+          "usage": "",
+          "example": "/context",
+          "notes": ""
+        },
+        {
+          "command": "/compact",
+          "aliases": [],
+          "description": "Compact conversation to free context. Pass focus instructions to guide what is preserved",
+          "usage": "[focus instructions]",
+          "example": "/compact focus on the auth flow changes",
+          "notes": ""
+        }
       ]
     },
     {
@@ -69,11 +259,50 @@
       "icon": "◎",
       "color": "#9673A6",
       "commands": [
-        { "command": "/plan", "aliases": [], "description": "Enter plan mode — Claude proposes all changes for your review before execution", "usage": "[task description]", "example": "/plan refactor the auth middleware to use JWT", "notes": "Best practice for all non-trivial tasks" },
-        { "command": "/ultraplan", "aliases": [], "description": "Draft a plan in an ultraplan session, review in browser, then execute remotely or send back to terminal", "usage": "<prompt>", "example": "/ultraplan migrate the entire API layer to TypeScript", "notes": "" },
-        { "command": "/permissions", "aliases": ["/allowed-tools"], "description": "Manage allow/ask/deny rules for tool permissions. Opens interactive dialog", "usage": "", "example": "/permissions", "notes": "" },
-        { "command": "/tasks", "aliases": ["/bashes"], "description": "List and manage background tasks", "usage": "", "example": "/tasks", "notes": "" },
-        { "command": "/schedule", "aliases": [], "description": "Create, update, list, or run cloud scheduled tasks. Claude walks through setup conversationally", "usage": "[description]", "example": "/schedule run tests every morning at 9am", "notes": "" }
+        {
+          "command": "/plan",
+          "aliases": [],
+          "description": "Enter plan mode — Claude proposes all changes for your review before execution",
+          "usage": "[task description]",
+          "example": "/plan refactor the auth middleware to use JWT",
+          "notes": "Best practice for all non-trivial tasks"
+        },
+        {
+          "command": "/ultraplan",
+          "aliases": [],
+          "description": "Draft a plan in an ultraplan session, review in browser, then execute remotely or send back to terminal",
+          "usage": "<prompt>",
+          "example": "/ultraplan migrate the entire API layer to TypeScript",
+          "notes": ""
+        },
+        {
+          "command": "/permissions",
+          "aliases": [
+            "/allowed-tools"
+          ],
+          "description": "Manage allow/ask/deny rules for tool permissions. Opens interactive dialog",
+          "usage": "",
+          "example": "/permissions",
+          "notes": ""
+        },
+        {
+          "command": "/tasks",
+          "aliases": [
+            "/bashes"
+          ],
+          "description": "List and manage background tasks",
+          "usage": "",
+          "example": "/tasks",
+          "notes": ""
+        },
+        {
+          "command": "/schedule",
+          "aliases": [],
+          "description": "Create, update, list, or run cloud scheduled tasks. Claude walks through setup conversationally",
+          "usage": "[description]",
+          "example": "/schedule run tests every morning at 9am",
+          "notes": ""
+        }
       ]
     },
     {
@@ -82,9 +311,30 @@
       "icon": "⎇",
       "color": "#23A455",
       "commands": [
-        { "command": "/diff", "aliases": [], "description": "Open interactive diff viewer showing uncommitted changes and per-turn diffs. Use arrow keys to browse", "usage": "", "example": "/diff", "notes": "Requires git repo" },
-        { "command": "/pr-comments", "aliases": [], "description": "Fetch and display comments from a GitHub PR. Auto-detects current branch PR or pass URL/number", "usage": "[PR URL or number]", "example": "/pr-comments 142", "notes": "Requires gh CLI" },
-        { "command": "/security-review", "aliases": [], "description": "Analyze pending changes on current branch for security vulnerabilities (injection, auth, data exposure)", "usage": "", "example": "/security-review", "notes": "Requires git repo" }
+        {
+          "command": "/diff",
+          "aliases": [],
+          "description": "Open interactive diff viewer showing uncommitted changes and per-turn diffs. Use arrow keys to browse",
+          "usage": "",
+          "example": "/diff",
+          "notes": "Requires git repo"
+        },
+        {
+          "command": "/pr-comments",
+          "aliases": [],
+          "description": "Fetch and display comments from a GitHub PR. Auto-detects current branch PR or pass URL/number",
+          "usage": "[PR URL or number]",
+          "example": "/pr-comments 142",
+          "notes": "Requires gh CLI"
+        },
+        {
+          "command": "/security-review",
+          "aliases": [],
+          "description": "Analyze pending changes on current branch for security vulnerabilities (injection, auth, data exposure)",
+          "usage": "",
+          "example": "/security-review",
+          "notes": "Requires git repo"
+        }
       ]
     },
     {
@@ -93,12 +343,56 @@
       "icon": "⬡",
       "color": "#AE4132",
       "commands": [
-        { "command": "/mcp", "aliases": [], "description": "Manage MCP server connections and OAuth authentication. MCP prompts appear as /mcp__server__prompt commands", "usage": "", "example": "/mcp", "notes": "" },
-        { "command": "/plugin", "aliases": ["/plugins"], "description": "Manage Claude Code plugins", "usage": "", "example": "/plugin", "notes": "" },
-        { "command": "/reload-plugins", "aliases": [], "description": "Reload all active plugins without restarting. Reports counts and errors", "usage": "", "example": "/reload-plugins", "notes": "" },
-        { "command": "/skills", "aliases": [], "description": "List available skills (built-in and custom in .claude/skills/)", "usage": "", "example": "/skills", "notes": "" },
-        { "command": "/hooks", "aliases": [], "description": "View hook configurations for tool events", "usage": "", "example": "/hooks", "notes": "" },
-        { "command": "/agents", "aliases": [], "description": "Manage agent configurations", "usage": "", "example": "/agents", "notes": "" }
+        {
+          "command": "/mcp",
+          "aliases": [],
+          "description": "Manage MCP server connections and OAuth authentication. MCP prompts appear as /mcp__server__prompt commands",
+          "usage": "",
+          "example": "/mcp",
+          "notes": ""
+        },
+        {
+          "command": "/plugin",
+          "aliases": [
+            "/plugins"
+          ],
+          "description": "Manage Claude Code plugins",
+          "usage": "",
+          "example": "/plugin",
+          "notes": ""
+        },
+        {
+          "command": "/reload-plugins",
+          "aliases": [],
+          "description": "Reload all active plugins without restarting. Reports counts and errors",
+          "usage": "",
+          "example": "/reload-plugins",
+          "notes": ""
+        },
+        {
+          "command": "/skills",
+          "aliases": [],
+          "description": "List available skills (built-in and custom in .claude/skills/)",
+          "usage": "",
+          "example": "/skills",
+          "notes": ""
+        },
+        {
+          "command": "/hooks",
+          "aliases": [],
+          "description": "View hook configurations for tool events",
+          "usage": "",
+          "example": "/hooks",
+          "notes": ""
+        },
+        {
+          "command": "/agents",
+          "aliases": [],
+          "description": "Manage agent configurations",
+          "usage": "",
+          "example": "/agents",
+          "notes": ""
+        }
       ]
     },
     {
@@ -107,12 +401,61 @@
       "icon": "▣",
       "color": "#0E7490",
       "commands": [
-        { "command": "/ide", "aliases": [], "description": "Manage IDE integrations (VS Code, JetBrains) and show connection status", "usage": "", "example": "/ide", "notes": "" },
-        { "command": "/add-dir", "aliases": [], "description": "Add a working directory for file access in the current session", "usage": "<path>", "example": "/add-dir ../shared-lib", "notes": "" },
-        { "command": "/desktop", "aliases": ["/app"], "description": "Continue current session in Claude Code Desktop app", "usage": "", "example": "/desktop", "notes": "macOS/Windows only" },
-        { "command": "/mobile", "aliases": ["/ios", "/android"], "description": "Show QR code to download the Claude mobile app", "usage": "", "example": "/mobile", "notes": "" },
-        { "command": "/chrome", "aliases": [], "description": "Configure Claude in Chrome settings for web automation and testing", "usage": "", "example": "/chrome", "notes": "" },
-        { "command": "/remote-control", "aliases": ["/rc"], "description": "Make session available for remote control from claude.ai", "usage": "", "example": "/remote-control", "notes": "" }
+        {
+          "command": "/ide",
+          "aliases": [],
+          "description": "Manage IDE integrations (VS Code, JetBrains) and show connection status",
+          "usage": "",
+          "example": "/ide",
+          "notes": ""
+        },
+        {
+          "command": "/add-dir",
+          "aliases": [],
+          "description": "Add a working directory for file access in the current session",
+          "usage": "<path>",
+          "example": "/add-dir ../shared-lib",
+          "notes": ""
+        },
+        {
+          "command": "/desktop",
+          "aliases": [
+            "/app"
+          ],
+          "description": "Continue current session in Claude Code Desktop app",
+          "usage": "",
+          "example": "/desktop",
+          "notes": "macOS/Windows only"
+        },
+        {
+          "command": "/mobile",
+          "aliases": [
+            "/ios",
+            "/android"
+          ],
+          "description": "Show QR code to download the Claude mobile app",
+          "usage": "",
+          "example": "/mobile",
+          "notes": ""
+        },
+        {
+          "command": "/chrome",
+          "aliases": [],
+          "description": "Configure Claude in Chrome settings for web automation and testing",
+          "usage": "",
+          "example": "/chrome",
+          "notes": ""
+        },
+        {
+          "command": "/remote-control",
+          "aliases": [
+            "/rc"
+          ],
+          "description": "Make session available for remote control from claude.ai",
+          "usage": "",
+          "example": "/remote-control",
+          "notes": ""
+        }
       ]
     },
     {
@@ -121,13 +464,62 @@
       "icon": "↗",
       "color": "#1A6B4A",
       "commands": [
-        { "command": "/export", "aliases": [], "description": "Export current conversation as plain text. With filename writes to file; without opens copy/save dialog", "usage": "[filename]", "example": "/export session-notes.txt", "notes": "" },
-        { "command": "/copy", "aliases": [], "description": "Copy last assistant response to clipboard. Pass N to copy Nth-latest. Press w in picker to write to file", "usage": "[N]", "example": "/copy 2", "notes": "" },
-        { "command": "/status", "aliases": [], "description": "Show version, model, account, and connectivity status. Works while Claude is responding", "usage": "", "example": "/status", "notes": "" },
-        { "command": "/cost", "aliases": [], "description": "Show token usage statistics and subscription billing details", "usage": "", "example": "/cost", "notes": "" },
-        { "command": "/usage", "aliases": [], "description": "Show plan usage limits and rate limit status", "usage": "", "example": "/usage", "notes": "" },
-        { "command": "/insights", "aliases": [], "description": "Generate report analyzing your Claude Code sessions — project areas, interaction patterns, friction points", "usage": "", "example": "/insights", "notes": "" },
-        { "command": "/stats", "aliases": [], "description": "Visualize daily usage, session history, streaks, model preferences", "usage": "", "example": "/stats", "notes": "" }
+        {
+          "command": "/export",
+          "aliases": [],
+          "description": "Export current conversation as plain text. With filename writes to file; without opens copy/save dialog",
+          "usage": "[filename]",
+          "example": "/export session-notes.txt",
+          "notes": ""
+        },
+        {
+          "command": "/copy",
+          "aliases": [],
+          "description": "Copy last assistant response to clipboard. Pass N to copy Nth-latest. Press w in picker to write to file",
+          "usage": "[N]",
+          "example": "/copy 2",
+          "notes": ""
+        },
+        {
+          "command": "/status",
+          "aliases": [],
+          "description": "Show version, model, account, and connectivity status. Works while Claude is responding",
+          "usage": "",
+          "example": "/status",
+          "notes": ""
+        },
+        {
+          "command": "/cost",
+          "aliases": [],
+          "description": "Show token usage statistics and subscription billing details",
+          "usage": "",
+          "example": "/cost",
+          "notes": ""
+        },
+        {
+          "command": "/usage",
+          "aliases": [],
+          "description": "Show plan usage limits and rate limit status",
+          "usage": "",
+          "example": "/usage",
+          "notes": ""
+        },
+        {
+          "command": "/insights",
+          "aliases": [],
+          "description": "Generate report analyzing your Claude Code sessions — project areas, interaction patterns, friction points",
+          "usage": "",
+          "example": "/insights",
+          "notes": ""
+        },
+        {
+          "command": "/stats",
+          "aliases": [],
+          "description": "Visualize daily usage, session history, streaks, model preferences",
+          "usage": "",
+          "example": "/stats",
+          "notes": ""
+        }
       ]
     },
     {
@@ -136,16 +528,88 @@
       "icon": "◉",
       "color": "#4A4A8A",
       "commands": [
-        { "command": "/login", "aliases": [], "description": "Sign in to your Anthropic account", "usage": "", "example": "/login", "notes": "" },
-        { "command": "/logout", "aliases": [], "description": "Sign out from your Anthropic account", "usage": "", "example": "/logout", "notes": "" },
-        { "command": "/doctor", "aliases": [], "description": "Diagnose and verify Claude Code installation and settings", "usage": "", "example": "/doctor", "notes": "Run first when something feels off" },
-        { "command": "/feedback", "aliases": ["/bug"], "description": "Submit feedback or bug reports about Claude Code", "usage": "[feedback text]", "example": "/feedback the diff viewer sometimes freezes on large files", "notes": "" },
-        { "command": "/release-notes", "aliases": [], "description": "View full changelog with most recent version first", "usage": "", "example": "/release-notes", "notes": "" },
-        { "command": "/upgrade", "aliases": [], "description": "Open upgrade page to switch to a higher plan tier", "usage": "", "example": "/upgrade", "notes": "Pro/Max plans" },
-        { "command": "/install-github-app", "aliases": [], "description": "Set up Claude GitHub Actions app — walks through repo selection and configuration", "usage": "", "example": "/install-github-app", "notes": "" },
-        { "command": "/install-slack-app", "aliases": [], "description": "Install Claude Slack app — opens browser for OAuth flow", "usage": "", "example": "/install-slack-app", "notes": "" },
-        { "command": "/powerup", "aliases": [], "description": "Discover Claude Code features through quick interactive lessons with animated demos", "usage": "", "example": "/powerup", "notes": "Great for onboarding" },
-        { "command": "/stickers", "aliases": [], "description": "Order Claude Code stickers", "usage": "", "example": "/stickers", "notes": "" }
+        {
+          "command": "/login",
+          "aliases": [],
+          "description": "Sign in to your Anthropic account",
+          "usage": "",
+          "example": "/login",
+          "notes": ""
+        },
+        {
+          "command": "/logout",
+          "aliases": [],
+          "description": "Sign out from your Anthropic account",
+          "usage": "",
+          "example": "/logout",
+          "notes": ""
+        },
+        {
+          "command": "/doctor",
+          "aliases": [],
+          "description": "Diagnose and verify Claude Code installation and settings",
+          "usage": "",
+          "example": "/doctor",
+          "notes": "Run first when something feels off"
+        },
+        {
+          "command": "/feedback",
+          "aliases": [
+            "/bug"
+          ],
+          "description": "Submit feedback or bug reports about Claude Code",
+          "usage": "[feedback text]",
+          "example": "/feedback the diff viewer sometimes freezes on large files",
+          "notes": ""
+        },
+        {
+          "command": "/release-notes",
+          "aliases": [],
+          "description": "View full changelog with most recent version first",
+          "usage": "",
+          "example": "/release-notes",
+          "notes": ""
+        },
+        {
+          "command": "/upgrade",
+          "aliases": [],
+          "description": "Open upgrade page to switch to a higher plan tier",
+          "usage": "",
+          "example": "/upgrade",
+          "notes": "Pro/Max plans"
+        },
+        {
+          "command": "/install-github-app",
+          "aliases": [],
+          "description": "Set up Claude GitHub Actions app — walks through repo selection and configuration",
+          "usage": "",
+          "example": "/install-github-app",
+          "notes": ""
+        },
+        {
+          "command": "/install-slack-app",
+          "aliases": [],
+          "description": "Install Claude Slack app — opens browser for OAuth flow",
+          "usage": "",
+          "example": "/install-slack-app",
+          "notes": ""
+        },
+        {
+          "command": "/powerup",
+          "aliases": [],
+          "description": "Discover Claude Code features through quick interactive lessons with animated demos",
+          "usage": "",
+          "example": "/powerup",
+          "notes": "Great for onboarding"
+        },
+        {
+          "command": "/stickers",
+          "aliases": [],
+          "description": "Order Claude Code stickers",
+          "usage": "",
+          "example": "/stickers",
+          "notes": ""
+        }
       ]
     },
     {
@@ -154,152 +618,778 @@
       "icon": "◆",
       "color": "#B45309",
       "commands": [
-        { "command": "/batch", "aliases": [], "description": "Orchestrate large-scale changes in parallel across your codebase. Researches → decomposes into 5–30 units → presents plan → spawns parallel agents in git worktrees", "usage": "<instruction>", "example": "/batch migrate all React class components to hooks", "notes": "Requires git repo" },
-        { "command": "/debug", "aliases": [], "description": "Enable debug logging and troubleshoot issues by reading the session debug log", "usage": "[description]", "example": "/debug why is the API returning 403 on login", "notes": "" },
-        { "command": "/loop", "aliases": [], "description": "Run a prompt repeatedly on an interval while the session stays open. Useful for polling deploys", "usage": "[interval] <prompt>", "example": "/loop 5m check if the deploy finished", "notes": "Default interval: 10m" },
-        { "command": "/simplify", "aliases": [], "description": "Review recently changed files for code reuse, quality, and efficiency. Spawns 3 review agents in parallel", "usage": "[focus]", "example": "/simplify focus on the database layer", "notes": "" },
-        { "command": "/claude-api", "aliases": [], "description": "Load Claude API reference (Python, TS, Java, Go, Ruby, C#, PHP, cURL) and Agent SDK refs. Covers tool use, streaming, batches, structured outputs", "usage": "", "example": "/claude-api", "notes": "Auto-activates when code imports anthropic" }
+        {
+          "command": "/batch",
+          "aliases": [],
+          "description": "Orchestrate large-scale changes in parallel across your codebase. Researches → decomposes into 5–30 units → presents plan → spawns parallel agents in git worktrees",
+          "usage": "<instruction>",
+          "example": "/batch migrate all React class components to hooks",
+          "notes": "Requires git repo"
+        },
+        {
+          "command": "/debug",
+          "aliases": [],
+          "description": "Enable debug logging and troubleshoot issues by reading the session debug log",
+          "usage": "[description]",
+          "example": "/debug why is the API returning 403 on login",
+          "notes": ""
+        },
+        {
+          "command": "/loop",
+          "aliases": [],
+          "description": "Run a prompt repeatedly on an interval while the session stays open. Useful for polling deploys",
+          "usage": "[interval] <prompt>",
+          "example": "/loop 5m check if the deploy finished",
+          "notes": "Default interval: 10m"
+        },
+        {
+          "command": "/simplify",
+          "aliases": [],
+          "description": "Review recently changed files for code reuse, quality, and efficiency. Spawns 3 review agents in parallel",
+          "usage": "[focus]",
+          "example": "/simplify focus on the database layer",
+          "notes": ""
+        },
+        {
+          "command": "/claude-api",
+          "aliases": [],
+          "description": "Load Claude API reference (Python, TS, Java, Go, Ruby, C#, PHP, cURL) and Agent SDK refs. Covers tool use, streaming, batches, structured outputs",
+          "usage": "",
+          "example": "/claude-api",
+          "notes": "Auto-activates when code imports anthropic"
+        }
       ]
     }
   ],
   "keyboard_shortcuts": {
     "general": [
-      { "keys": ["Ctrl+C"], "description": "Cancel current input or generation" },
-      { "keys": ["Ctrl+D"], "description": "Exit Claude Code (EOF)" },
-      { "keys": ["Ctrl+L"], "description": "Redraw screen without clearing history" },
-      { "keys": ["Ctrl+O"], "description": "Toggle verbose output (shows detailed tool usage)" },
-      { "keys": ["Ctrl+R"], "description": "Reverse search command history" },
-      { "keys": ["Ctrl+G", "Ctrl+X Ctrl+E"], "description": "Open current prompt in default text editor" },
-      { "keys": ["Ctrl+V", "Cmd+V"], "description": "Paste image from clipboard" },
-      { "keys": ["Ctrl+B"], "description": "Background a running task (press twice on tmux)" },
-      { "keys": ["Ctrl+T"], "description": "Toggle task list in terminal status area" },
-      { "keys": ["Ctrl+X Ctrl+K"], "description": "Kill all background agents (press twice within 3s to confirm)" },
-      { "keys": ["Shift+Tab", "Alt+M"], "description": "Cycle permission modes: default → acceptEdits → plan → auto/bypassPermissions" },
-      { "keys": ["Option+P", "Alt+P"], "description": "Switch model without clearing your current prompt" },
-      { "keys": ["Option+T", "Alt+T"], "description": "Toggle extended thinking mode" },
-      { "keys": ["Option+O", "Alt+O"], "description": "Toggle fast mode" },
-      { "keys": ["Esc Esc"], "description": "Rewind / summarize conversation" },
-      { "keys": ["Hold Space"], "description": "Push-to-talk voice dictation (if voice enabled)" }
+      {
+        "keys": [
+          "Ctrl+C"
+        ],
+        "description": "Cancel current input or generation"
+      },
+      {
+        "keys": [
+          "Ctrl+D"
+        ],
+        "description": "Exit Claude Code (EOF)"
+      },
+      {
+        "keys": [
+          "Ctrl+L"
+        ],
+        "description": "Redraw screen without clearing history"
+      },
+      {
+        "keys": [
+          "Ctrl+O"
+        ],
+        "description": "Toggle verbose output (shows detailed tool usage)"
+      },
+      {
+        "keys": [
+          "Ctrl+R"
+        ],
+        "description": "Reverse search command history"
+      },
+      {
+        "keys": [
+          "Ctrl+G",
+          "Ctrl+X Ctrl+E"
+        ],
+        "description": "Open current prompt in default text editor"
+      },
+      {
+        "keys": [
+          "Ctrl+V",
+          "Cmd+V"
+        ],
+        "description": "Paste image from clipboard"
+      },
+      {
+        "keys": [
+          "Ctrl+B"
+        ],
+        "description": "Background a running task (press twice on tmux)"
+      },
+      {
+        "keys": [
+          "Ctrl+T"
+        ],
+        "description": "Toggle task list in terminal status area"
+      },
+      {
+        "keys": [
+          "Ctrl+X Ctrl+K"
+        ],
+        "description": "Kill all background agents (press twice within 3s to confirm)"
+      },
+      {
+        "keys": [
+          "Shift+Tab",
+          "Alt+M"
+        ],
+        "description": "Cycle permission modes: default → acceptEdits → plan → auto/bypassPermissions"
+      },
+      {
+        "keys": [
+          "Option+P",
+          "Alt+P"
+        ],
+        "description": "Switch model without clearing your current prompt"
+      },
+      {
+        "keys": [
+          "Option+T",
+          "Alt+T"
+        ],
+        "description": "Toggle extended thinking mode"
+      },
+      {
+        "keys": [
+          "Option+O",
+          "Alt+O"
+        ],
+        "description": "Toggle fast mode"
+      },
+      {
+        "keys": [
+          "Esc Esc"
+        ],
+        "description": "Rewind / summarize conversation"
+      },
+      {
+        "keys": [
+          "Hold Space"
+        ],
+        "description": "Push-to-talk voice dictation (if voice enabled)"
+      }
     ],
     "text_editing": [
-      { "keys": ["Ctrl+K"], "description": "Delete to end of line (stores for paste)" },
-      { "keys": ["Ctrl+U"], "description": "Delete from cursor to line start" },
-      { "keys": ["Ctrl+Y"], "description": "Paste deleted text" },
-      { "keys": ["Alt+Y"], "description": "Cycle paste history (after Ctrl+Y)" },
-      { "keys": ["Alt+B"], "description": "Move cursor back one word" },
-      { "keys": ["Alt+F"], "description": "Move cursor forward one word" }
+      {
+        "keys": [
+          "Ctrl+K"
+        ],
+        "description": "Delete to end of line (stores for paste)"
+      },
+      {
+        "keys": [
+          "Ctrl+U"
+        ],
+        "description": "Delete from cursor to line start"
+      },
+      {
+        "keys": [
+          "Ctrl+Y"
+        ],
+        "description": "Paste deleted text"
+      },
+      {
+        "keys": [
+          "Alt+Y"
+        ],
+        "description": "Cycle paste history (after Ctrl+Y)"
+      },
+      {
+        "keys": [
+          "Alt+B"
+        ],
+        "description": "Move cursor back one word"
+      },
+      {
+        "keys": [
+          "Alt+F"
+        ],
+        "description": "Move cursor forward one word"
+      }
     ],
     "multiline": [
-      { "keys": ["\\ + Enter"], "description": "New line (works in all terminals)" },
-      { "keys": ["Option+Enter"], "description": "New line (macOS default)" },
-      { "keys": ["Shift+Enter"], "description": "New line (iTerm2, WezTerm, Ghostty, Kitty)" },
-      { "keys": ["Ctrl+J"], "description": "New line (line feed — works everywhere)" }
+      {
+        "keys": [
+          "\\ + Enter"
+        ],
+        "description": "New line (works in all terminals)"
+      },
+      {
+        "keys": [
+          "Option+Enter"
+        ],
+        "description": "New line (macOS default)"
+      },
+      {
+        "keys": [
+          "Shift+Enter"
+        ],
+        "description": "New line (iTerm2, WezTerm, Ghostty, Kitty)"
+      },
+      {
+        "keys": [
+          "Ctrl+J"
+        ],
+        "description": "New line (line feed — works everywhere)"
+      }
     ],
     "vim_mode": {
       "mode_switching": [
-        { "keys": ["Esc"], "description": "Enter NORMAL mode" },
-        { "keys": ["i"], "description": "Insert before cursor" },
-        { "keys": ["I"], "description": "Insert at beginning of line" },
-        { "keys": ["a"], "description": "Insert after cursor" },
-        { "keys": ["A"], "description": "Insert at end of line" },
-        { "keys": ["o"], "description": "Open new line below" },
-        { "keys": ["O"], "description": "Open new line above" }
+        {
+          "keys": [
+            "Esc"
+          ],
+          "description": "Enter NORMAL mode"
+        },
+        {
+          "keys": [
+            "i"
+          ],
+          "description": "Insert before cursor"
+        },
+        {
+          "keys": [
+            "I"
+          ],
+          "description": "Insert at beginning of line"
+        },
+        {
+          "keys": [
+            "a"
+          ],
+          "description": "Insert after cursor"
+        },
+        {
+          "keys": [
+            "A"
+          ],
+          "description": "Insert at end of line"
+        },
+        {
+          "keys": [
+            "o"
+          ],
+          "description": "Open new line below"
+        },
+        {
+          "keys": [
+            "O"
+          ],
+          "description": "Open new line above"
+        }
       ],
       "navigation": [
-        { "keys": ["h/j/k/l"], "description": "Move left/down/up/right" },
-        { "keys": ["w"], "description": "Next word" },
-        { "keys": ["e"], "description": "End of word" },
-        { "keys": ["b"], "description": "Previous word" },
-        { "keys": ["0"], "description": "Beginning of line" },
-        { "keys": ["$"], "description": "End of line" },
-        { "keys": ["^"], "description": "First non-blank character" },
-        { "keys": ["gg"], "description": "Beginning of input" },
-        { "keys": ["G"], "description": "End of input" },
-        { "keys": ["f{char}"], "description": "Jump to next occurrence of character" },
-        { "keys": ["F{char}"], "description": "Jump to previous occurrence" },
-        { "keys": [";"], "description": "Repeat last f/F/t/T motion" },
-        { "keys": [","], "description": "Repeat last f/F/t/T in reverse" }
+        {
+          "keys": [
+            "h/j/k/l"
+          ],
+          "description": "Move left/down/up/right"
+        },
+        {
+          "keys": [
+            "w"
+          ],
+          "description": "Next word"
+        },
+        {
+          "keys": [
+            "e"
+          ],
+          "description": "End of word"
+        },
+        {
+          "keys": [
+            "b"
+          ],
+          "description": "Previous word"
+        },
+        {
+          "keys": [
+            "0"
+          ],
+          "description": "Beginning of line"
+        },
+        {
+          "keys": [
+            "$"
+          ],
+          "description": "End of line"
+        },
+        {
+          "keys": [
+            "^"
+          ],
+          "description": "First non-blank character"
+        },
+        {
+          "keys": [
+            "gg"
+          ],
+          "description": "Beginning of input"
+        },
+        {
+          "keys": [
+            "G"
+          ],
+          "description": "End of input"
+        },
+        {
+          "keys": [
+            "f{char}"
+          ],
+          "description": "Jump to next occurrence of character"
+        },
+        {
+          "keys": [
+            "F{char}"
+          ],
+          "description": "Jump to previous occurrence"
+        },
+        {
+          "keys": [
+            ";"
+          ],
+          "description": "Repeat last f/F/t/T motion"
+        },
+        {
+          "keys": [
+            ","
+          ],
+          "description": "Repeat last f/F/t/T in reverse"
+        }
       ],
       "editing": [
-        { "keys": ["x"], "description": "Delete character" },
-        { "keys": ["dd"], "description": "Delete line" },
-        { "keys": ["D"], "description": "Delete to end of line" },
-        { "keys": ["cc"], "description": "Change line" },
-        { "keys": ["C"], "description": "Change to end of line" },
-        { "keys": ["yy", "Y"], "description": "Yank (copy) line" },
-        { "keys": ["p"], "description": "Paste after cursor" },
-        { "keys": ["P"], "description": "Paste before cursor" },
-        { "keys": [">>"], "description": "Indent line" },
-        { "keys": ["<<"], "description": "Dedent line" },
-        { "keys": ["J"], "description": "Join lines" },
-        { "keys": ["."], "description": "Repeat last change" }
+        {
+          "keys": [
+            "x"
+          ],
+          "description": "Delete character"
+        },
+        {
+          "keys": [
+            "dd"
+          ],
+          "description": "Delete line"
+        },
+        {
+          "keys": [
+            "D"
+          ],
+          "description": "Delete to end of line"
+        },
+        {
+          "keys": [
+            "cc"
+          ],
+          "description": "Change line"
+        },
+        {
+          "keys": [
+            "C"
+          ],
+          "description": "Change to end of line"
+        },
+        {
+          "keys": [
+            "yy",
+            "Y"
+          ],
+          "description": "Yank (copy) line"
+        },
+        {
+          "keys": [
+            "p"
+          ],
+          "description": "Paste after cursor"
+        },
+        {
+          "keys": [
+            "P"
+          ],
+          "description": "Paste before cursor"
+        },
+        {
+          "keys": [
+            ">>"
+          ],
+          "description": "Indent line"
+        },
+        {
+          "keys": [
+            "<<"
+          ],
+          "description": "Dedent line"
+        },
+        {
+          "keys": [
+            "J"
+          ],
+          "description": "Join lines"
+        },
+        {
+          "keys": [
+            "."
+          ],
+          "description": "Repeat last change"
+        }
       ]
     }
   },
   "permission_modes": [
-    { "mode": "default", "shortcut": "Shift+Tab ×1", "description": "Claude asks permission before each action. Safest for new projects.", "risk": "low" },
-    { "mode": "acceptEdits", "shortcut": "Shift+Tab ×2", "description": "Claude auto-accepts file edits without prompting. Still asks for shell commands.", "risk": "medium" },
-    { "mode": "plan", "shortcut": "Shift+Tab ×3", "description": "Claude drafts all changes in plan mode for your review before any execution.", "risk": "low" },
-    { "mode": "auto", "shortcut": "Shift+Tab ×4", "description": "ML classifier auto-approves safe operations. Still requires approval for dangerous actions.", "risk": "medium", "requires": "Team/Enterprise/API plan + Sonnet 4.6+ or Opus 4.6" },
-    { "mode": "bypassPermissions", "shortcut": "Shift+Tab ×5", "description": "Skip all permission prompts. Use only in sandboxed/trusted environments.", "risk": "high" }
+    {
+      "mode": "default",
+      "shortcut": "Shift+Tab ×1",
+      "description": "Claude asks permission before each action. Safest for new projects.",
+      "risk": "low"
+    },
+    {
+      "mode": "acceptEdits",
+      "shortcut": "Shift+Tab ×2",
+      "description": "Claude auto-accepts file edits without prompting. Still asks for shell commands.",
+      "risk": "medium"
+    },
+    {
+      "mode": "plan",
+      "shortcut": "Shift+Tab ×3",
+      "description": "Claude drafts all changes in plan mode for your review before any execution.",
+      "risk": "low"
+    },
+    {
+      "mode": "auto",
+      "shortcut": "Shift+Tab ×4",
+      "description": "ML classifier auto-approves safe operations. Still requires approval for dangerous actions.",
+      "risk": "medium",
+      "requires": "Team/Enterprise/API plan + Sonnet 4.6+ or Opus 4.6"
+    },
+    {
+      "mode": "bypassPermissions",
+      "shortcut": "Shift+Tab ×5",
+      "description": "Skip all permission prompts. Use only in sandboxed/trusted environments.",
+      "risk": "high"
+    }
   ],
   "input_prefixes": [
-    { "prefix": "/", "description": "Command and skill autocomplete — see the full command menu" },
-    { "prefix": "!", "description": "Bash mode — run shell commands directly. Output added to conversation context. Supports Tab autocomplete and Ctrl+B backgrounding" },
-    { "prefix": "@", "description": "File path mention — triggers autocomplete for files in your working directory" }
+    {
+      "prefix": "/",
+      "description": "Command and skill autocomplete — see the full command menu"
+    },
+    {
+      "prefix": "!",
+      "description": "Bash mode — run shell commands directly. Output added to conversation context. Supports Tab autocomplete and Ctrl+B backgrounding"
+    },
+    {
+      "prefix": "@",
+      "description": "File path mention — triggers autocomplete for files in your working directory"
+    }
   ],
   "cli_flags": [
-    { "flag": "-p, --print", "description": "Print response without interactive mode (SDK/scripting mode)", "example": "claude -p \"what does this do?\"" },
-    { "flag": "-c, --continue", "description": "Continue most recent conversation in current directory", "example": "claude -c" },
-    { "flag": "-r, --resume", "description": "Resume specific session by ID or name", "example": "claude -r \"my-task\"" },
-    { "flag": "-n, --name", "description": "Set display name for this session", "example": "claude -n \"auth-refactor\"" },
-    { "flag": "-w, --worktree", "description": "Start in an isolated git worktree branch", "example": "claude -w feature-x" },
-    { "flag": "--model", "description": "Set model at startup (aliases: sonnet, opus)", "example": "claude --model opus" },
-    { "flag": "--effort", "description": "Set effort level at startup", "example": "claude --effort high" },
-    { "flag": "--permission-mode", "description": "Begin in a specific permission mode", "example": "claude --permission-mode plan" },
-    { "flag": "--remote", "description": "Create a web session on claude.ai", "example": "claude --remote \"Fix auth bug\"" },
-    { "flag": "--ide", "description": "Auto-connect to IDE if available", "example": "claude --ide" },
-    { "flag": "--add-dir", "description": "Grant file access to additional directories at startup", "example": "claude --add-dir ../shared-lib" },
-    { "flag": "--system-prompt", "description": "Replace the entire system prompt", "example": "claude --system-prompt \"You are...\"" },
-    { "flag": "--append-system-prompt", "description": "Append to the default system prompt", "example": "claude --append-system-prompt \"Always use TypeScript\"" },
-    { "flag": "--chrome", "description": "Enable Chrome browser integration", "example": "claude --chrome" },
-    { "flag": "--verbose", "description": "Enable verbose logging", "example": "claude --verbose" },
-    { "flag": "--debug", "description": "Enable debug mode with optional filters", "example": "claude --debug \"api,mcp\"" },
-    { "flag": "--bare", "description": "Skip auto-discovery for faster startup (use with -p)", "example": "claude --bare -p \"query\"" },
-    { "flag": "-v, --version", "description": "Show current version", "example": "claude -v" },
-    { "flag": "--help", "description": "Show help", "example": "claude --help" }
+    {
+      "flag": "-p, --print",
+      "description": "Print response without interactive mode (SDK/scripting mode)",
+      "example": "claude -p \"what does this do?\""
+    },
+    {
+      "flag": "-c, --continue",
+      "description": "Continue most recent conversation in current directory",
+      "example": "claude -c"
+    },
+    {
+      "flag": "-r, --resume",
+      "description": "Resume specific session by ID or name",
+      "example": "claude -r \"my-task\""
+    },
+    {
+      "flag": "-n, --name",
+      "description": "Set display name for this session",
+      "example": "claude -n \"auth-refactor\""
+    },
+    {
+      "flag": "-w, --worktree",
+      "description": "Start in an isolated git worktree branch",
+      "example": "claude -w feature-x"
+    },
+    {
+      "flag": "--model",
+      "description": "Set model at startup (aliases: sonnet, opus)",
+      "example": "claude --model opus"
+    },
+    {
+      "flag": "--effort",
+      "description": "Set effort level at startup",
+      "example": "claude --effort high"
+    },
+    {
+      "flag": "--permission-mode",
+      "description": "Begin in a specific permission mode",
+      "example": "claude --permission-mode plan"
+    },
+    {
+      "flag": "--remote",
+      "description": "Create a web session on claude.ai",
+      "example": "claude --remote \"Fix auth bug\""
+    },
+    {
+      "flag": "--ide",
+      "description": "Auto-connect to IDE if available",
+      "example": "claude --ide"
+    },
+    {
+      "flag": "--add-dir",
+      "description": "Grant file access to additional directories at startup",
+      "example": "claude --add-dir ../shared-lib"
+    },
+    {
+      "flag": "--system-prompt",
+      "description": "Replace the entire system prompt",
+      "example": "claude --system-prompt \"You are...\""
+    },
+    {
+      "flag": "--append-system-prompt",
+      "description": "Append to the default system prompt",
+      "example": "claude --append-system-prompt \"Always use TypeScript\""
+    },
+    {
+      "flag": "--chrome",
+      "description": "Enable Chrome browser integration",
+      "example": "claude --chrome"
+    },
+    {
+      "flag": "--verbose",
+      "description": "Enable verbose logging",
+      "example": "claude --verbose"
+    },
+    {
+      "flag": "--debug",
+      "description": "Enable debug mode with optional filters",
+      "example": "claude --debug \"api,mcp\""
+    },
+    {
+      "flag": "--bare",
+      "description": "Skip auto-discovery for faster startup (use with -p)",
+      "example": "claude --bare -p \"query\""
+    },
+    {
+      "flag": "-v, --version",
+      "description": "Show current version",
+      "example": "claude -v"
+    },
+    {
+      "flag": "--help",
+      "description": "Show help",
+      "example": "claude --help"
+    }
   ],
   "agents": {
     "how_to_spawn": "Use the Agent tool with subagent_type parameter, or Claude auto-selects based on task context.",
     "custom_agents_path": ".claude/agents/",
     "custom_agents_format": "Markdown files (AGENT_NAME.md) with tool restrictions and instructions.",
     "built_in": [
-      { "type": "general-purpose", "description": "General-purpose agent for research, code search, and multi-step tasks", "tools": "All tools", "can_edit": true },
-      { "type": "Explore", "description": "Fast codebase exploration — find files, search code, answer architecture questions", "tools": "Read-only (no Edit/Write)", "can_edit": false },
-      { "type": "Plan", "description": "Software architect — designs implementation plans and identifies critical files", "tools": "Read-only (no Edit/Write)", "can_edit": false },
-      { "type": "code-simplifier", "description": "Simplify and refine code for maximum clarity while preserving all functionality", "tools": "All tools", "can_edit": true },
-      { "type": "code-auditor", "description": "Compare implementations against specs, find gaps, missing edge cases. READ-ONLY", "tools": "Read-only", "can_edit": false },
-      { "type": "qa-engineer", "description": "Design test strategies, run test suites (pytest/vitest/jest/playwright), verify coverage", "tools": "All tools", "can_edit": true },
-      { "type": "security-specialist", "description": "Security audits, OWASP Top 10, threat modeling, dependency CVE scanning, secrets detection", "tools": "Read-only", "can_edit": false },
-      { "type": "devils-advocate", "description": "Challenge assumptions, identify risks, score confidence, find failure modes", "tools": "All tools", "can_edit": true },
-      { "type": "lead-architect", "description": "System architecture, API design, database architecture, ADRs, Mermaid diagrams. No code", "tools": "All tools", "can_edit": true },
-      { "type": "technical-writer", "description": "API docs (OpenAPI), READMEs, developer guides, migration guides, changelogs", "tools": "All tools", "can_edit": true },
-      { "type": "product-owner", "description": "PRDs, user stories with acceptance criteria, MVP scope, RICE/MoSCoW prioritization. No code", "tools": "All tools", "can_edit": true },
-      { "type": "research-analyst", "description": "Research technologies, compare frameworks, evaluate libraries, produce structured briefs", "tools": "All tools", "can_edit": true },
-      { "type": "venture-strategist", "description": "Market sizing (TAM/SAM/SOM), competitive analysis, pricing strategy, SaaS unit economics", "tools": "All tools", "can_edit": true },
-      { "type": "ios-developer", "description": "Native iOS/SwiftUI code — views, navigation, Swift concurrency, SwiftData, HealthKit/CloudKit", "tools": "All tools", "can_edit": true },
-      { "type": "mobile-developer", "description": "React Native / Expo — screens, navigation, FlashList, Reanimated, MMKV, NativeWind", "tools": "All tools", "can_edit": true },
-      { "type": "rust-systems-developer", "description": "Production Rust — ownership, async Tokio, axum/sqlx/serde, error handling, benchmarks", "tools": "All tools", "can_edit": true },
-      { "type": "performance-engineer", "description": "Optimize React, Next.js, React Native, iOS performance. Profiling-first approach", "tools": "All tools", "can_edit": true },
-      { "type": "devops-engineer", "description": "CI/CD pipelines, IaC (Terraform/Pulumi), deployment strategies, monitoring, rollback plans", "tools": "All tools", "can_edit": true },
-      { "type": "ai-agent-architect", "description": "AI/LLM system design, multi-agent orchestration, RAG, tool schemas, prompt engineering", "tools": "All tools", "can_edit": true },
-      { "type": "ux-strategist", "description": "UX audits (Nielsen's 10), user journey mapping, information architecture, WCAG 2.2 AA", "tools": "All tools", "can_edit": true },
-      { "type": "ui-validator", "description": "Visual QA — validate UI across viewports, component states, interactions, accessibility", "tools": "Read-only", "can_edit": false },
-      { "type": "design-systems-specialist", "description": "Design tokens, component libraries (atomic design), multi-theme architecture, WCAG compliance", "tools": "All tools", "can_edit": true },
-      { "type": "content-strategist", "description": "Editorial calendars, content briefs, brand voice, SEO content planning, distribution strategy", "tools": "All tools", "can_edit": true },
-      { "type": "community-manager", "description": "Discord/Telegram/Discourse engagement, moderation, event planning, growth strategies", "tools": "All tools", "can_edit": true },
-      { "type": "claude-code-guide", "description": "Answer questions about Claude Code features, hooks, MCP servers, settings, IDE integrations", "tools": "Read-only + Web", "can_edit": false },
-      { "type": "statusline-setup", "description": "Configure the Claude Code status line setting", "tools": "Read + Edit only", "can_edit": true }
+      {
+        "type": "general-purpose",
+        "description": "General-purpose agent for research, code search, and multi-step tasks",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "Explore",
+        "description": "Fast codebase exploration — find files, search code, answer architecture questions",
+        "tools": "Read-only (no Edit/Write)",
+        "can_edit": false
+      },
+      {
+        "type": "Plan",
+        "description": "Software architect — designs implementation plans and identifies critical files",
+        "tools": "Read-only (no Edit/Write)",
+        "can_edit": false
+      },
+      {
+        "type": "code-simplifier",
+        "description": "Simplify and refine code for maximum clarity while preserving all functionality",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "code-auditor",
+        "description": "Compare implementations against specs, find gaps, missing edge cases. READ-ONLY",
+        "tools": "Read-only",
+        "can_edit": false
+      },
+      {
+        "type": "qa-engineer",
+        "description": "Design test strategies, run test suites (pytest/vitest/jest/playwright), verify coverage",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "security-specialist",
+        "description": "Security audits, OWASP Top 10, threat modeling, dependency CVE scanning, secrets detection",
+        "tools": "Read-only",
+        "can_edit": false
+      },
+      {
+        "type": "devils-advocate",
+        "description": "Challenge assumptions, identify risks, score confidence, find failure modes",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "lead-architect",
+        "description": "System architecture, API design, database architecture, ADRs, Mermaid diagrams. No code",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "technical-writer",
+        "description": "API docs (OpenAPI), READMEs, developer guides, migration guides, changelogs",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "product-owner",
+        "description": "PRDs, user stories with acceptance criteria, MVP scope, RICE/MoSCoW prioritization. No code",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "research-analyst",
+        "description": "Research technologies, compare frameworks, evaluate libraries, produce structured briefs",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "venture-strategist",
+        "description": "Market sizing (TAM/SAM/SOM), competitive analysis, pricing strategy, SaaS unit economics",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "ios-developer",
+        "description": "Native iOS/SwiftUI code — views, navigation, Swift concurrency, SwiftData, HealthKit/CloudKit",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "mobile-developer",
+        "description": "React Native / Expo — screens, navigation, FlashList, Reanimated, MMKV, NativeWind",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "rust-systems-developer",
+        "description": "Production Rust — ownership, async Tokio, axum/sqlx/serde, error handling, benchmarks",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "performance-engineer",
+        "description": "Optimize React, Next.js, React Native, iOS performance. Profiling-first approach",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "devops-engineer",
+        "description": "CI/CD pipelines, IaC (Terraform/Pulumi), deployment strategies, monitoring, rollback plans",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "ai-agent-architect",
+        "description": "AI/LLM system design, multi-agent orchestration, RAG, tool schemas, prompt engineering",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "ux-strategist",
+        "description": "UX audits (Nielsen's 10), user journey mapping, information architecture, WCAG 2.2 AA",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "ui-validator",
+        "description": "Visual QA — validate UI across viewports, component states, interactions, accessibility",
+        "tools": "Read-only",
+        "can_edit": false
+      },
+      {
+        "type": "design-systems-specialist",
+        "description": "Design tokens, component libraries (atomic design), multi-theme architecture, WCAG compliance",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "content-strategist",
+        "description": "Editorial calendars, content briefs, brand voice, SEO content planning, distribution strategy",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "community-manager",
+        "description": "Discord/Telegram/Discourse engagement, moderation, event planning, growth strategies",
+        "tools": "All tools",
+        "can_edit": true
+      },
+      {
+        "type": "claude-code-guide",
+        "description": "Answer questions about Claude Code features, hooks, MCP servers, settings, IDE integrations",
+        "tools": "Read-only + Web",
+        "can_edit": false
+      },
+      {
+        "type": "statusline-setup",
+        "description": "Configure the Claude Code status line setting",
+        "tools": "Read + Edit only",
+        "can_edit": true
+      }
     ]
-  }
+  },
+  "changelog": [
+    {
+      "version": "2.1.92",
+      "date": "2026-04-05",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.92",
+      "release_notes_raw": "## What's changed\n\n- Added `forceRemoteSettingsRefresh` policy setting: when set, the CLI blocks startup until remote managed settings are freshly fetched, and exits if the fetch fails (fail-closed)\n- Added interactive Bedrock setup wizard accessible from the login screen when selecting \"3rd-party platform\" — guides you through AWS authentication, region configuration, credential verification, and model pinning\n- Added per-model and cache-hit breakdown to `/cost` for subscription users\n- `/release-notes` is now an interactive version picker\n- Remote Control session names now use your hostname as the default prefix (e.g. `myhost-graceful-unicorn`), overridable with `--remote-control-session-name-prefix`\n- Pro users now see a footer hint when returning to a session after the prompt cache has expired, showing roughly how many tokens the next turn will send uncached\n- Fixed subagent spawning permanently failing with \"Could not determine pane count\" after tmux windows are killed or renumbered during a long-running session\n- Fixed prompt-type Stop hooks incorrectly failing when the small fast model returns `ok:false`, and restored `preventContinuation:true` semantics for non-Stop prompt-type hooks\n- Fixed tool input validation failures when streaming emits array/object fields as JSON-encoded strings\n- Fixed an API 400 error that could occur when extended thinking produced a whitespace-only text block alongside real content\n- Fixed accidental feedback survey submissions from auto-pilot keypresses and consecutive-prompt digit collisions\n- Fixed misleading \"esc to interrupt\" hint appearing alongside \"esc to clear\" when a text selection exists in fullscreen mode during processing\n- Fixed Homebrew install update prompts to use the cask's release channel (`claude-code` → stable, `claude-code@latest` → latest)\n- Fixed `ctrl+e` jumping to the end of the next line when already at end of line in multiline prompts\n- Fixed an issue where the same message could appear at two positions",
+      "parsed_changes": [
+        {
+          "type": "new",
+          "text": "Added per-model and cache-hit breakdown to `/cost` for subscription users",
+          "commands": [
+            "/cost"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/release-notes` is now an interactive version picker",
+          "commands": [
+            "/release-notes"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed tool input validation failures when streaming emits array/object fields as JSON-encoded strings",
+          "commands": [
+            "/object"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed idle-return \"/clear to save X tokens\" hint showing cumulative session tokens instead of current context size",
+          "commands": [
+            "/clear"
+          ]
+        },
+        {
+          "type": "removed",
+          "text": "Removed `/tag` command",
+          "commands": [
+            "/tag"
+          ]
+        },
+        {
+          "type": "removed",
+          "text": "Removed `/vim` command (toggle vim mode via `/config` → Editor mode)",
+          "commands": [
+            "/vim",
+            "/config"
+          ]
+        }
+      ]
+    }
+  ]
 }
