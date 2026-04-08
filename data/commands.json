@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-05"
+    "last_updated": "2026-04-08"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,13 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.96",
+      "date": "2026-04-08",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.96",
+      "release_notes_raw": "## What's changed\n\n- Fixed Bedrock requests failing with `403 \"Authorization header is missing\"` when using `AWS_BEARER_TOKEN_BEDROCK` or `CLAUDE_CODE_SKIP_BEDROCK_AUTH` (regression in 2.1.94)\n",
+      "parsed_changes": []
+    },
     {
       "version": "2.1.92",
       "date": "2026-04-05",
