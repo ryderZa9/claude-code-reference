@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-08"
+    "last_updated": "2026-04-09"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,65 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.97",
+      "date": "2026-04-09",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.97",
+      "release_notes_raw": "## What's changed\n\n- Added focus view toggle (`Ctrl+O`) in `NO_FLICKER` mode showing prompt, one-line tool summary with edit diffstats, and final response\n- Added `refreshInterval` status line setting to re-run the status line command every N seconds\n- Added `workspace.git_worktree` to the status line JSON input, set when the current directory is inside a linked git worktree\n- Added `● N running` indicator in `/agents` next to agent types with live subagent instances\n- Added syntax highlighting for Cedar policy files (`.cedar`, `.cedarpolicy`)\n- Fixed `--dangerously-skip-permissions` being silently downgraded to accept-edits mode after approving a write to a protected path\n- Fixed and hardened Bash tool permissions, tightening checks around env-var prefixes and network redirects, and reducing false prompts on common commands\n- Fixed permission rules with names matching JavaScript prototype properties (e.g. `toString`) causing `settings.json` to be silently ignored\n- Fixed managed-settings allow rules remaining active after an admin removed them until process restart\n- Fixed `permissions.additionalDirectories` changes in settings not applying mid-session\n- Fixed removing a directory from `settings.permissions.additionalDirectories` revoking access to the same directory passed via `--add-dir`\n- Fixed MCP HTTP/SSE connections accumulating ~50 MB/hr of unreleased buffers when servers reconnect\n- Fixed MCP OAuth `oauth.authServerMetadataUrl` not being honored on token refresh after restart, fixing ADFS and similar IdPs\n- Fixed 429 retries burning all attempts in ~13 seconds when the server returns a small `Retry-After` — exponential backoff now applies as a minimum\n- Fixed rate-limit upgrade options disappearing after context compaction\n- Fixed several `/resume` picker issues: `--resume <name>` opening uneditable, Ctrl+A reload wiping search, empty list swallowing navigation, task-status text replacing conversation summary, and cross-project staleness\n- Fixed file-edit d",
+      "parsed_changes": [
+        {
+          "type": "new",
+          "text": "Added `● N running` indicator in `/agents` next to agent types with live subagent instances",
+          "commands": [
+            "/agents"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed MCP HTTP/SSE connections accumulating ~50 MB/hr of unreleased buffers when servers reconnect",
+          "commands": [
+            "/SSE",
+            "/hr"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed several `/resume` picker issues: `--resume <name>` opening uneditable, Ctrl+A reload wiping search, empty list swallowing navigation, task-status text replacing conversation summary, and cross-project staleness",
+          "commands": [
+            "/resume"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed Shift+Enter and Alt/Cmd+arrow shortcuts not working in Warp with `NO_FLICKER` mode",
+          "commands": [
+            "/Cmd"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed Korean/Japanese/Unicode text becoming garbled when copied in no-flicker mode on Windows",
+          "commands": [
+            "/Japanese",
+            "/Unicode"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Improved slash command and `@`-mention completion to trigger after CJK sentence punctuation, so Japanese/Chinese input no longer requires a space before `/` or `@`",
+          "commands": [
+            "/Chinese"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Updated `/claude-api` skill to cover Managed Agents alongside the Claude API",
+          "commands": [
+            "/claude-api"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.96",
       "date": "2026-04-08",
