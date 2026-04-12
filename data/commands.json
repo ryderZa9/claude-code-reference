@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-11"
+    "last_updated": "2026-04-12"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,127 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.104",
+      "date": "2026-04-12",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.101",
+      "release_notes_raw": "## What's changed\n\n- Added `/team-onboarding` command to generate a teammate ramp-up guide from your local Claude Code usage\n- Added OS CA certificate store trust by default, so enterprise TLS proxies work without extra setup (set `CLAUDE_CODE_CERT_STORE=bundled` to use only bundled CAs)\n- `/ultraplan` and other remote-session features now auto-create a default cloud environment instead of requiring web setup first\n- Improved brief mode to retry once when Claude responds with plain text instead of a structured message\n- Improved focus mode: Claude now writes more self-contained summaries since it knows you only see its final message\n- Improved tool-not-available errors to explain why and how to proceed when the model calls a tool that exists but isn't available in the current context\n- Improved rate-limit retry messages to show which limit was hit and when it resets instead of an opaque seconds countdown\n- Improved refusal error messages to include the API-provided explanation when available\n- Improved `claude -p --resume <name>` to accept session titles set via `/rename` or `--name`\n- Improved settings resilience: an unrecognized hook event name in `settings.json` no longer causes the entire file to be ignored\n- Improved plugin hooks from plugins force-enabled by managed settings to run when `allowManagedHooksOnly` is set\n- Improved `/plugin` and `claude plugin update` to show a warning when the marketplace could not be refreshed, instead of silently reporting a stale version\n- Improved plan mode to hide the \"Refine with Ultraplan\" option when the user's org or auth setup can't reach Claude Code on the web\n- Improved beta tracing to honor `OTEL_LOG_USER_PROMPTS`, `OTEL_LOG_TOOL_DETAILS`, and `OTEL_LOG_TOOL_CONTENT`; sensitive span attributes are no longer emitted unless opted in\n- Improved SDK `query()` to clean up subprocess and temp files when consumers `break` from `for await` or use `await using`\n- Fixed a command injection vulnerability in the POSIX `which` fa",
+      "parsed_changes": [
+        {
+          "type": "new",
+          "text": "Added `/team-onboarding` command to generate a teammate ramp-up guide from your local Claude Code usage",
+          "commands": [
+            "/team-onboarding"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/ultraplan` and other remote-session features now auto-create a default cloud environment instead of requiring web setup first",
+          "commands": [
+            "/ultraplan"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Improved `claude -p --resume <name>` to accept session titles set via `/rename` or `--name`",
+          "commands": [
+            "/rename"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Improved `/plugin` and `claude plugin update` to show a warning when the marketplace could not be refreshed, instead of silently reporting a stale version",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed a crash on `--resume` when a persisted Edit/Write tool result was missing its `file_path`",
+          "commands": [
+            "/Write"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed sub-agents running in isolated worktrees being denied Read/Edit access to files inside their own worktree",
+          "commands": [
+            "/Edit"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed several `/resume` picker issues: narrow default view hiding sessions from other projects, unreachable preview on Windows Terminal, incorrect cwd in worktrees, session-not-found errors not surfacing in stderr, terminal title not being set, and resume hint overlapping the prompt input",
+          "commands": [
+            "/resume"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/btw` writing a copy of the entire conversation to disk on every use",
+          "commands": [
+            "/btw"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/context` Free space and Messages breakdown disagreeing with the header percentage",
+          "commands": [
+            "/context"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed several plugin issues: slash commands resolving to the wrong plugin with duplicate `name:` frontmatter, `/plugin update` failing with `ENAMETOOLONG`, Discover showing already-installed plugins, directory-source plugins loading from a stale version cache, and skills not honoring `context: fork` and `agent` frontmatter fields",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed the `/mcp` menu offering OAuth-specific actions for MCP servers configured with `headersHelper`; Reconnect is now offered instead to re-invoke the helper script",
+          "commands": [
+            "/mcp"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "Fixed `/login` OAuth URL rendering with padding that prevented clean mouse selection",
+          "commands": [
+            "/login"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "Fixed in-app settings writes (e.g. `/add-dir --remember`, `/config`) not refreshing the in-memory snapshot, preventing removed directories from being revoked mid-session",
+          "commands": [
+            "/add-dir",
+            "/config"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed custom keybindings (`~/.claude/keybindings.json`) not loading on Bedrock, Vertex, and other third-party providers",
+          "commands": [
+            "/keybindings"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed several Remote Control issues: worktrees removed on session crash, connection failures not persisting in the transcript, spurious \"Disconnected\" indicator in brief mode for local sessions, and `/remote-control` failing over SSH when only `CLAUDE_CODE_ORGANIZATION_UUID` is set",
+          "commands": [
+            "/remote-control"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/insights` sometimes omitting the report file link from its response",
+          "commands": [
+            "/insights"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.101",
       "date": "2026-04-11",
