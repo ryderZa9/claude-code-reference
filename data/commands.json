@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-12"
+    "last_updated": "2026-04-14"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,13 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.107",
+      "date": "2026-04-14",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.107",
+      "release_notes_raw": "## What's changed\n\n- Show thinking hints sooner during long operations\n",
+      "parsed_changes": []
+    },
     {
       "version": "2.1.104",
       "date": "2026-04-12",
