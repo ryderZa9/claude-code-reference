@@ -238,8 +238,8 @@ kbd {
 <header class="header">
   <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
-  <span class="header-version">v2.1.109</span>
-  <span class="header-updated">Updated 2026-04-15</span>
+  <span class="header-version">v2.1.110</span>
+  <span class="header-updated">Updated 2026-04-16</span>
 
   <div class="search-wrap">
     <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
@@ -267,8 +267,8 @@ kbd {
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
     <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
-      <span class="hero-chip">v2.1.109</span>
-      <span class="hero-chip">Updated 2026-04-15</span>
+      <span class="hero-chip">v2.1.110</span>
+      <span class="hero-chip">Updated 2026-04-16</span>
       <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
@@ -1705,6 +1705,17 @@ kbd {
       <span class="section-icon">↻</span>Auto-Update Changelog
     </h2>
     
+    <div class="changelog-entry">
+      <div class="changelog-header">
+        <span class="changelog-version">v2.1.110</span>
+        <span class="changelog-date">2026-04-16</span>
+        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.110" target="_blank" rel="noopener">Release notes ↗</a>
+      </div>
+      
+        <ul class="changelog-changes">
+          <li><span class="change-type change-new">new</span> Added `/tui` command and `tui` setting — run `/tui fullscreen` to switch to flicker-free rendering in the same conversation</li><li><span class="change-type change-new">new</span> Changed `Ctrl+O` to toggle between normal and verbose transcript only; focus view is now toggled separately with the new `/focus` command</li><li><span class="change-type change-new">new</span> Added option to show Claude's last response as commented context in the `Ctrl+G` external editor (enable via `/config`)</li><li><span class="change-type change-updated">updated</span> Improved `/plugin` Installed tab — items needing attention and favorites appear at the top, disabled items are hidden behind a fold, and `f` favorites the selected item</li><li><span class="change-type change-updated">updated</span> Improved `/doctor` to warn when an MCP server is defined in multiple config scopes with different endpoints</li><li><span class="change-type change-updated">updated</span> `/autocompact`, `/context`, `/exit`, and `/reload-plugins` now work from Remote Control (mobile/web) clients</li><li><span class="change-type change-updated">updated</span> SDK/headless sessions now read `TRACEPARENT`/`TRACESTATE` from the environment for distributed trace linking</li><li><span class="change-type change-updated">updated</span> Session recap is now enabled for users with telemetry disabled (Bedrock, Vertex, Foundry, `DISABLE_TELEMETRY`). Opt out via `/config` or `CLAUDE_CODE_ENABLE_AWAY_SUMMARY=0`.</li><li><span class="change-type change-fix">fix</span> Fixed MCP tool calls hanging indefinitely when the server connection drops mid-response on SSE/HTTP transports</li><li><span class="change-type change-fix">fix</span> Fixed plugin install not honoring dependencies declared in `plugin.json` when the marketplace entry omits them; `/plugin` install now lists auto-installed dependencies</li><li><span class="change-type change-fix">fix</span> Fixed `--resume` sometimes showing the first prompt instead of the `/rename` name for sessions still running or exited uncleanly</li><li><span class="change-type change-fix">fix</span> Fixed dropped keystrokes after the CLI relaunches (e.g. `/tui`, provider setup wizards)</li><li><span class="change-type change-fix">fix</span> Fixed headless/SDK session auto-title firing an extra Haiku request when `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` or `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` is set</li><li><span class="change-type change-fix">fix</span> Fixed `/skills` menu not scrolling when the list overflows the modal in fullscreen mode</li>
+        </ul>
+    </div>
     <div class="changelog-entry">
       <div class="changelog-header">
         <span class="changelog-version">v2.1.109</span>

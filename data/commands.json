@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-15"
+    "last_updated": "2026-04-16"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,117 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.110",
+      "date": "2026-04-16",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.110",
+      "release_notes_raw": "## What's changed\r\n\r\n- Added `/tui` command and `tui` setting — run `/tui fullscreen` to switch to flicker-free rendering in the same conversation\r\n- Changed `Ctrl+O` to toggle between normal and verbose transcript only; focus view is now toggled separately with the new `/focus` command\r\n- Added push notification tool — Claude can send mobile push notifications when Remote Control and \"Push when Claude decides\" config are enabled\r\n- Added `autoScrollEnabled` config to disable conversation auto-scroll in fullscreen mode\r\n- Added option to show Claude's last response as commented context in the `Ctrl+G` external editor (enable via `/config`)\r\n- Improved `/plugin` Installed tab — items needing attention and favorites appear at the top, disabled items are hidden behind a fold, and `f` favorites the selected item\r\n- Improved `/doctor` to warn when an MCP server is defined in multiple config scopes with different endpoints\r\n- `--resume`/`--continue` now resurrects unexpired scheduled tasks\r\n- `/autocompact`, `/context`, `/exit`, and `/reload-plugins` now work from Remote Control (mobile/web) clients\r\n- Write tool now informs the model when you edit the proposed content in the IDE diff before accepting\r\n- Bash tool now enforces the documented maximum timeout instead of accepting arbitrarily large values\r\n- SDK/headless sessions now read `TRACEPARENT`/`TRACESTATE` from the environment for distributed trace linking\r\n- Session recap is now enabled for users with telemetry disabled (Bedrock, Vertex, Foundry, `DISABLE_TELEMETRY`). Opt out via `/config` or `CLAUDE_CODE_ENABLE_AWAY_SUMMARY=0`.\r\n- Fixed MCP tool calls hanging indefinitely when the server connection drops mid-response on SSE/HTTP transports\r\n- Fixed non-streaming fallback retries causing multi-minute hangs when the API is unreachable\r\n- Fixed session recap, local slash-command output, and other system status lines not appearing in focus mode\r\n- Fixed high CPU usage in fullscreen when text is selected while a tool i",
+      "parsed_changes": [
+        {
+          "type": "new",
+          "text": "Added `/tui` command and `tui` setting — run `/tui fullscreen` to switch to flicker-free rendering in the same conversation",
+          "commands": [
+            "/tui",
+            "/tui"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "Changed `Ctrl+O` to toggle between normal and verbose transcript only; focus view is now toggled separately with the new `/focus` command",
+          "commands": [
+            "/focus"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "Added option to show Claude's last response as commented context in the `Ctrl+G` external editor (enable via `/config`)",
+          "commands": [
+            "/config"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Improved `/plugin` Installed tab — items needing attention and favorites appear at the top, disabled items are hidden behind a fold, and `f` favorites the selected item",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Improved `/doctor` to warn when an MCP server is defined in multiple config scopes with different endpoints",
+          "commands": [
+            "/doctor"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/autocompact`, `/context`, `/exit`, and `/reload-plugins` now work from Remote Control (mobile/web) clients",
+          "commands": [
+            "/autocompact",
+            "/context",
+            "/exit",
+            "/reload-plugins",
+            "/web"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "SDK/headless sessions now read `TRACEPARENT`/`TRACESTATE` from the environment for distributed trace linking",
+          "commands": [
+            "/headless"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Session recap is now enabled for users with telemetry disabled (Bedrock, Vertex, Foundry, `DISABLE_TELEMETRY`). Opt out via `/config` or `CLAUDE_CODE_ENABLE_AWAY_SUMMARY=0`.",
+          "commands": [
+            "/config"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed MCP tool calls hanging indefinitely when the server connection drops mid-response on SSE/HTTP transports",
+          "commands": [
+            "/HTTP"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed plugin install not honoring dependencies declared in `plugin.json` when the marketplace entry omits them; `/plugin` install now lists auto-installed dependencies",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `--resume` sometimes showing the first prompt instead of the `/rename` name for sessions still running or exited uncleanly",
+          "commands": [
+            "/rename"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed dropped keystrokes after the CLI relaunches (e.g. `/tui`, provider setup wizards)",
+          "commands": [
+            "/tui"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed headless/SDK session auto-title firing an extra Haiku request when `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` or `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` is set",
+          "commands": [
+            "/SDK"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/skills` menu not scrolling when the list overflows the modal in fullscreen mode",
+          "commands": [
+            "/skills"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.109",
       "date": "2026-04-15",
