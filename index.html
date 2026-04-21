@@ -238,8 +238,8 @@ kbd {
 <header class="header">
   <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
-  <span class="header-version">v2.1.114</span>
-  <span class="header-updated">Updated 2026-04-18</span>
+  <span class="header-version">v2.1.116</span>
+  <span class="header-updated">Updated 2026-04-21</span>
 
   <div class="search-wrap">
     <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
@@ -267,8 +267,8 @@ kbd {
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
     <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
-      <span class="hero-chip">v2.1.114</span>
-      <span class="hero-chip">Updated 2026-04-18</span>
+      <span class="hero-chip">v2.1.116</span>
+      <span class="hero-chip">Updated 2026-04-21</span>
       <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
@@ -1707,6 +1707,17 @@ kbd {
     
     <div class="changelog-entry">
       <div class="changelog-header">
+        <span class="changelog-version">v2.1.116</span>
+        <span class="changelog-date">2026-04-21</span>
+        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.116" target="_blank" rel="noopener">Release notes ↗</a>
+      </div>
+      
+        <ul class="changelog-changes">
+          <li><span class="change-type change-updated">updated</span> `/resume` on large sessions is significantly faster (up to 67% on 40MB+ sessions) and handles sessions with many dead-fork entries more efficiently</li><li><span class="change-type change-updated">updated</span> Faster MCP startup when multiple stdio servers are configured; `resources/templates/list` is now deferred to first `@`-mention</li><li><span class="change-type change-updated">updated</span> Smoother fullscreen scrolling in VS Code, Cursor, and Windsurf terminals — `/terminal-setup` now configures the editor's scroll sensitivity</li><li><span class="change-type change-updated">updated</span> `/config` search now matches option values (e.g. searching &quot;vim&quot; finds the Editor mode setting)</li><li><span class="change-type change-updated">updated</span> `/doctor` can now be opened while Claude is responding, without waiting for the current turn to finish</li><li><span class="change-type change-new">new</span> `/reload-plugins` and background plugin auto-update now auto-install missing plugin dependencies from marketplaces you've already added</li><li><span class="change-type change-fix">fix</span> Fixed Cmd+Left/Right not jumping to line start/end in terminals that use the Kitty keyboard protocol (Warp fullscreen, kitty, Ghostty, WezTerm)</li><li><span class="change-type change-fix">fix</span> Fixed `/branch` rejecting conversations with transcripts larger than 50MB</li><li><span class="change-type change-fix">fix</span> Fixed `/resume` silently showing an empty conversation on large session files instead of reporting the load error</li><li><span class="change-type change-fix">fix</span> Fixed `/plugin` Installed tab showing the same item twice when it appears under Needs attention or Favorites</li><li><span class="change-type change-fix">fix</span> Fixed `/update` and `/tui` not working after entering a worktree mid-session</li>
+        </ul>
+    </div>
+    <div class="changelog-entry">
+      <div class="changelog-header">
         <span class="changelog-version">v2.1.114</span>
         <span class="changelog-date">2026-04-18</span>
         <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.114" target="_blank" rel="noopener">Release notes ↗</a>
@@ -1788,14 +1799,6 @@ kbd {
         <ul class="changelog-changes">
           <li><span class="change-type change-new">new</span> Added `● N running` indicator in `/agents` next to agent types with live subagent instances</li><li><span class="change-type change-fix">fix</span> Fixed MCP HTTP/SSE connections accumulating ~50 MB/hr of unreleased buffers when servers reconnect</li><li><span class="change-type change-fix">fix</span> Fixed several `/resume` picker issues: `--resume &lt;name&gt;` opening uneditable, Ctrl+A reload wiping search, empty list swallowing navigation, task-status text replacing conversation summary, and cross-project staleness</li><li><span class="change-type change-fix">fix</span> Fixed Shift+Enter and Alt/Cmd+arrow shortcuts not working in Warp with `NO_FLICKER` mode</li><li><span class="change-type change-fix">fix</span> Fixed Korean/Japanese/Unicode text becoming garbled when copied in no-flicker mode on Windows</li><li><span class="change-type change-updated">updated</span> Improved slash command and `@`-mention completion to trigger after CJK sentence punctuation, so Japanese/Chinese input no longer requires a space before `/` or `@`</li><li><span class="change-type change-updated">updated</span> Updated `/claude-api` skill to cover Managed Agents alongside the Claude API</li>
         </ul>
-    </div>
-    <div class="changelog-entry">
-      <div class="changelog-header">
-        <span class="changelog-version">v2.1.96</span>
-        <span class="changelog-date">2026-04-08</span>
-        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.96" target="_blank" rel="noopener">Release notes ↗</a>
-      </div>
-      <p class="muted">See release notes for full details.</p>
     </div>
   </section>
 

@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-18"
+    "last_updated": "2026-04-21"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,94 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.116",
+      "date": "2026-04-21",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.116",
+      "release_notes_raw": "## What's changed\n\n- `/resume` on large sessions is significantly faster (up to 67% on 40MB+ sessions) and handles sessions with many dead-fork entries more efficiently\n- Faster MCP startup when multiple stdio servers are configured; `resources/templates/list` is now deferred to first `@`-mention\n- Smoother fullscreen scrolling in VS Code, Cursor, and Windsurf terminals — `/terminal-setup` now configures the editor's scroll sensitivity\n- Thinking spinner now shows progress inline (\"still thinking\", \"thinking more\", \"almost done thinking\"), replacing the separate hint row\n- `/config` search now matches option values (e.g. searching \"vim\" finds the Editor mode setting)\n- `/doctor` can now be opened while Claude is responding, without waiting for the current turn to finish\n- `/reload-plugins` and background plugin auto-update now auto-install missing plugin dependencies from marketplaces you've already added\n- Bash tool now surfaces a hint when `gh` commands hit GitHub's API rate limit, so agents can back off instead of retrying\n- The Usage tab in Settings now shows your 5-hour and weekly usage immediately and no longer fails when the usage endpoint is rate-limited\n- Agent frontmatter `hooks:` now fire when running as a main-thread agent via `--agent`\n- Slash command menu now shows \"No commands match\" when your filter has zero results, instead of disappearing\n- Security: sandbox auto-allow no longer bypasses the dangerous-path safety check for `rm`/`rmdir` targeting `/`, `$HOME`, or other critical system directories\n- Fixed Devanagari and other Indic scripts rendering with broken column alignment in the terminal UI\n- Fixed Ctrl+- not triggering undo in terminals using the Kitty keyboard protocol (iTerm2, Ghostty, kitty, WezTerm, Windows Terminal)\n- Fixed Cmd+Left/Right not jumping to line start/end in terminals that use the Kitty keyboard protocol (Warp fullscreen, kitty, Ghostty, WezTerm)\n- Fixed Ctrl+Z hanging the terminal when Claude Code is launched via a wrapper p",
+      "parsed_changes": [
+        {
+          "type": "updated",
+          "text": "`/resume` on large sessions is significantly faster (up to 67% on 40MB+ sessions) and handles sessions with many dead-fork entries more efficiently",
+          "commands": [
+            "/resume"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Faster MCP startup when multiple stdio servers are configured; `resources/templates/list` is now deferred to first `@`-mention",
+          "commands": [
+            "/templates",
+            "/list"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Smoother fullscreen scrolling in VS Code, Cursor, and Windsurf terminals — `/terminal-setup` now configures the editor's scroll sensitivity",
+          "commands": [
+            "/terminal-setup"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/config` search now matches option values (e.g. searching \"vim\" finds the Editor mode setting)",
+          "commands": [
+            "/config"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/doctor` can now be opened while Claude is responding, without waiting for the current turn to finish",
+          "commands": [
+            "/doctor"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "`/reload-plugins` and background plugin auto-update now auto-install missing plugin dependencies from marketplaces you've already added",
+          "commands": [
+            "/reload-plugins"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed Cmd+Left/Right not jumping to line start/end in terminals that use the Kitty keyboard protocol (Warp fullscreen, kitty, Ghostty, WezTerm)",
+          "commands": [
+            "/Right",
+            "/end"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/branch` rejecting conversations with transcripts larger than 50MB",
+          "commands": [
+            "/branch"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/resume` silently showing an empty conversation on large session files instead of reporting the load error",
+          "commands": [
+            "/resume"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/plugin` Installed tab showing the same item twice when it appears under Needs attention or Favorites",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/update` and `/tui` not working after entering a worktree mid-session",
+          "commands": [
+            "/update",
+            "/tui"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.114",
       "date": "2026-04-18",
