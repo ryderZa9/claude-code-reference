@@ -238,8 +238,8 @@ kbd {
 <header class="header">
   <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
-  <span class="header-version">v2.1.116</span>
-  <span class="header-updated">Updated 2026-04-21</span>
+  <span class="header-version">v2.1.117</span>
+  <span class="header-updated">Updated 2026-04-22</span>
 
   <div class="search-wrap">
     <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
@@ -267,8 +267,8 @@ kbd {
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
     <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
-      <span class="hero-chip">v2.1.116</span>
-      <span class="hero-chip">Updated 2026-04-21</span>
+      <span class="hero-chip">v2.1.117</span>
+      <span class="hero-chip">Updated 2026-04-22</span>
       <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
@@ -1707,6 +1707,17 @@ kbd {
     
     <div class="changelog-entry">
       <div class="changelog-header">
+        <span class="changelog-version">v2.1.117</span>
+        <span class="changelog-date">2026-04-22</span>
+        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.117" target="_blank" rel="noopener">Release notes ↗</a>
+      </div>
+      
+        <ul class="changelog-changes">
+          <li><span class="change-type change-updated">updated</span> Improved `/model`: selections now persist across restarts even when the project pins a different model, and the startup header shows when the active model comes from a project or managed-settings pin</li><li><span class="change-type change-updated">updated</span> The `/resume` command now offers to summarize stale, large sessions before re-reading them, matching the existing `--resume` behavior</li><li><span class="change-type change-updated">updated</span> Advisor Tool (experimental): dialog now carries an &quot;experimental&quot; label, learn-more link, and startup notification when enabled; sessions no longer get stuck with &quot;Advisor tool result content could not be processed&quot; errors on every prompt and `/compact`</li><li><span class="change-type change-updated">updated</span> The `cleanupPeriodDays` retention sweep now also covers `~/.claude/tasks/`, `~/.claude/shell-snapshots/`, and `~/.claude/backups/`</li><li><span class="change-type change-updated">updated</span> OpenTelemetry: `user_prompt` events now include `command_name` and `command_source` for slash commands; `cost.usage`, `token.usage`, `api_request`, and `api_error` now include an `effort` attribute when the model supports effort levels. Custom/MCP command names are redacted unless `OTEL_LOG_TOOL_DETAILS=1` is set</li><li><span class="change-type change-updated">updated</span> Default effort for Pro/Max subscribers on Opus 4.6 and Sonnet 4.6 is now `high` (was `medium`)</li><li><span class="change-type change-fix">fix</span> Fixed Plain-CLI OAuth sessions dying with &quot;Please run /login&quot; when the access token expires mid-session — the token is now refreshed reactively on 401</li><li><span class="change-type change-fix">fix</span> Fixed `/login` having no effect when launched with `CLAUDE_CODE_OAUTH_TOKEN` env var and that token expires</li><li><span class="change-type change-fix">fix</span> Fixed rare spurious escape/return triggers when key names arrive as coalesced text over slow connections</li><li><span class="change-type change-fix">fix</span> Fixed MCP `elicitation/create` requests auto-cancelling in print/SDK mode when the server finishes connecting mid-turn</li><li><span class="change-type change-fix">fix</span> Fixed Opus 4.7 sessions showing inflated `/context` percentages and autocompacting too early — Claude Code was computing against a 200K context window instead of Opus 4.7's native 1M</li>
+        </ul>
+    </div>
+    <div class="changelog-entry">
+      <div class="changelog-header">
         <span class="changelog-version">v2.1.116</span>
         <span class="changelog-date">2026-04-21</span>
         <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.116" target="_blank" rel="noopener">Release notes ↗</a>
@@ -1788,17 +1799,6 @@ kbd {
         <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.100" target="_blank" rel="noopener">Release notes ↗</a>
       </div>
       <p class="muted">See release notes for full details.</p>
-    </div>
-    <div class="changelog-entry">
-      <div class="changelog-header">
-        <span class="changelog-version">v2.1.97</span>
-        <span class="changelog-date">2026-04-09</span>
-        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.97" target="_blank" rel="noopener">Release notes ↗</a>
-      </div>
-      
-        <ul class="changelog-changes">
-          <li><span class="change-type change-new">new</span> Added `● N running` indicator in `/agents` next to agent types with live subagent instances</li><li><span class="change-type change-fix">fix</span> Fixed MCP HTTP/SSE connections accumulating ~50 MB/hr of unreleased buffers when servers reconnect</li><li><span class="change-type change-fix">fix</span> Fixed several `/resume` picker issues: `--resume &lt;name&gt;` opening uneditable, Ctrl+A reload wiping search, empty list swallowing navigation, task-status text replacing conversation summary, and cross-project staleness</li><li><span class="change-type change-fix">fix</span> Fixed Shift+Enter and Alt/Cmd+arrow shortcuts not working in Warp with `NO_FLICKER` mode</li><li><span class="change-type change-fix">fix</span> Fixed Korean/Japanese/Unicode text becoming garbled when copied in no-flicker mode on Windows</li><li><span class="change-type change-updated">updated</span> Improved slash command and `@`-mention completion to trigger after CJK sentence punctuation, so Japanese/Chinese input no longer requires a space before `/` or `@`</li><li><span class="change-type change-updated">updated</span> Updated `/claude-api` skill to cover Managed Agents alongside the Claude API</li>
-        </ul>
     </div>
   </section>
 
