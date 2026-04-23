@@ -238,8 +238,8 @@ kbd {
 <header class="header">
   <button class="btn-icon hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
   <div class="header-logo">claude<span>/</span>ref</div>
-  <span class="header-version">v2.1.117</span>
-  <span class="header-updated">Updated 2026-04-22</span>
+  <span class="header-version">v2.1.118</span>
+  <span class="header-updated">Updated 2026-04-23</span>
 
   <div class="search-wrap">
     <input class="search-input" type="search" placeholder="Search commands, shortcuts…" id="search" oninput="handleSearch(this.value)" autocomplete="off" spellcheck="false">
@@ -267,8 +267,8 @@ kbd {
     <h1 class="hero-title"><span>Claude Code</span> Reference Guide</h1>
     <p class="hero-sub">Every command, shortcut, and mode — always current. Click any command to copy it.</p>
     <div class="hero-meta">
-      <span class="hero-chip">v2.1.117</span>
-      <span class="hero-chip">Updated 2026-04-22</span>
+      <span class="hero-chip">v2.1.118</span>
+      <span class="hero-chip">Updated 2026-04-23</span>
       <span class="hero-chip"><a href="https://github.com/anthropics/claude-code/releases" target="_blank" rel="noopener">anthropics/claude-code releases ↗</a></span>
     </div>
   </div>
@@ -1707,6 +1707,17 @@ kbd {
     
     <div class="changelog-entry">
       <div class="changelog-header">
+        <span class="changelog-version">v2.1.118</span>
+        <span class="changelog-date">2026-04-23</span>
+        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.118" target="_blank" rel="noopener">Release notes ↗</a>
+      </div>
+      
+        <ul class="changelog-changes">
+          <li><span class="change-type change-updated">updated</span> Merged `/cost` and `/stats` into `/usage` — both remain as typing shortcuts that open the relevant tab</li><li><span class="change-type change-updated">updated</span> Create and switch between named custom themes from `/theme`, or hand-edit JSON files in `~/.claude/themes/`; plugins can also ship themes via a `themes/` directory</li><li><span class="change-type change-new">new</span> `--continue`/`--resume` now find sessions that added the current directory via `/add-dir`</li><li><span class="change-type change-updated">updated</span> `/color` now syncs the session accent color to claude.ai/code when Remote Control is connected</li><li><span class="change-type change-updated">updated</span> The `/model` picker now honors `ANTHROPIC_DEFAULT_*_MODEL_NAME`/`_DESCRIPTION` overrides when using a custom `ANTHROPIC_BASE_URL` gateway</li><li><span class="change-type change-updated">updated</span> When auto-update skips a plugin due to another plugin's version constraint, the skip now appears in `/doctor` and the `/plugin` Errors tab</li><li><span class="change-type change-fix">fix</span> Fixed `/mcp` menu hiding OAuth Authenticate/Re-authenticate actions for servers configured with `headersHelper`, and HTTP/SSE MCP servers with custom headers being stuck in &quot;needs authentication&quot; after a transient 401</li><li><span class="change-type change-fix">fix</span> Fixed macOS keychain race where a concurrent MCP token refresh could overwrite a freshly-refreshed OAuth token, causing unexpected &quot;Please run /login&quot; prompts</li><li><span class="change-type change-fix">fix</span> Fixed credential save crash on Linux/Windows corrupting `~/.claude/.credentials.json`</li><li><span class="change-type change-fix">fix</span> Fixed `/login` having no effect in a session launched with `CLAUDE_CODE_OAUTH_TOKEN` — the env token is now cleared so disk credentials take effect</li><li><span class="change-type change-new">new</span> Fixed unreadable text in the &quot;new messages&quot; scroll pill and `/plugin` badges</li><li><span class="change-type change-fix">fix</span> Fixed `/fork` writing the full parent conversation to disk per fork — now writes a pointer and hydrates on read</li><li><span class="change-type change-fix">fix</span> Fixed connecting to a remote session overwriting your local `model` setting in `~/.claude/settings.json`</li>
+        </ul>
+    </div>
+    <div class="changelog-entry">
+      <div class="changelog-header">
         <span class="changelog-version">v2.1.117</span>
         <span class="changelog-date">2026-04-22</span>
         <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.117" target="_blank" rel="noopener">Release notes ↗</a>
@@ -1791,14 +1802,6 @@ kbd {
         <ul class="changelog-changes">
           <li><span class="change-type change-new">new</span> Added `/team-onboarding` command to generate a teammate ramp-up guide from your local Claude Code usage</li><li><span class="change-type change-updated">updated</span> `/ultraplan` and other remote-session features now auto-create a default cloud environment instead of requiring web setup first</li><li><span class="change-type change-updated">updated</span> Improved `claude -p --resume &lt;name&gt;` to accept session titles set via `/rename` or `--name`</li><li><span class="change-type change-updated">updated</span> Improved `/plugin` and `claude plugin update` to show a warning when the marketplace could not be refreshed, instead of silently reporting a stale version</li><li><span class="change-type change-fix">fix</span> Fixed a crash on `--resume` when a persisted Edit/Write tool result was missing its `file_path`</li><li><span class="change-type change-fix">fix</span> Fixed sub-agents running in isolated worktrees being denied Read/Edit access to files inside their own worktree</li><li><span class="change-type change-fix">fix</span> Fixed several `/resume` picker issues: narrow default view hiding sessions from other projects, unreachable preview on Windows Terminal, incorrect cwd in worktrees, session-not-found errors not surfacing in stderr, terminal title not being set, and resume hint overlapping the prompt input</li><li><span class="change-type change-fix">fix</span> Fixed `/btw` writing a copy of the entire conversation to disk on every use</li><li><span class="change-type change-fix">fix</span> Fixed `/context` Free space and Messages breakdown disagreeing with the header percentage</li><li><span class="change-type change-fix">fix</span> Fixed several plugin issues: slash commands resolving to the wrong plugin with duplicate `name:` frontmatter, `/plugin update` failing with `ENAMETOOLONG`, Discover showing already-installed plugins, directory-source plugins loading from a stale version cache, and skills not honoring `context: fork` and `agent` frontmatter fields</li><li><span class="change-type change-fix">fix</span> Fixed the `/mcp` menu offering OAuth-specific actions for MCP servers configured with `headersHelper`; Reconnect is now offered instead to re-invoke the helper script</li><li><span class="change-type change-new">new</span> Fixed `/login` OAuth URL rendering with padding that prevented clean mouse selection</li><li><span class="change-type change-new">new</span> Fixed in-app settings writes (e.g. `/add-dir --remember`, `/config`) not refreshing the in-memory snapshot, preventing removed directories from being revoked mid-session</li><li><span class="change-type change-fix">fix</span> Fixed custom keybindings (`~/.claude/keybindings.json`) not loading on Bedrock, Vertex, and other third-party providers</li><li><span class="change-type change-fix">fix</span> Fixed several Remote Control issues: worktrees removed on session crash, connection failures not persisting in the transcript, spurious &quot;Disconnected&quot; indicator in brief mode for local sessions, and `/remote-control` failing over SSH when only `CLAUDE_CODE_ORGANIZATION_UUID` is set</li><li><span class="change-type change-fix">fix</span> Fixed `/insights` sometimes omitting the report file link from its response</li>
         </ul>
-    </div>
-    <div class="changelog-entry">
-      <div class="changelog-header">
-        <span class="changelog-version">v2.1.100</span>
-        <span class="changelog-date">2026-04-10</span>
-        <a class="changelog-link" href="https://github.com/anthropics/claude-code/releases/tag/v2.1.100" target="_blank" rel="noopener">Release notes ↗</a>
-      </div>
-      <p class="muted">See release notes for full details.</p>
     </div>
   </section>
 

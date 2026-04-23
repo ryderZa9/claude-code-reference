@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-22"
+    "last_updated": "2026-04-23"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,112 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.118",
+      "date": "2026-04-23",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.118",
+      "release_notes_raw": "## What's changed\n\n- Added vim visual mode (`v`) and visual-line mode (`V`) with selection, operators, and visual feedback\n- Merged `/cost` and `/stats` into `/usage` — both remain as typing shortcuts that open the relevant tab\n- Create and switch between named custom themes from `/theme`, or hand-edit JSON files in `~/.claude/themes/`; plugins can also ship themes via a `themes/` directory\n- Hooks can now invoke MCP tools directly via `type: \"mcp_tool\"`\n- Added `DISABLE_UPDATES` env var to completely block all update paths including manual `claude update` — stricter than `DISABLE_AUTOUPDATER`\n- WSL on Windows can now inherit Windows-side managed settings via the `wslInheritsWindowsSettings` policy key\n- Auto mode: include `\"$defaults\"` in `autoMode.allow`, `autoMode.soft_deny`, or `autoMode.environment` to add custom rules alongside the built-in list instead of replacing it\n- Added a \"Don't ask again\" option to the auto mode opt-in prompt\n- Added `claude plugin tag` to create release git tags for plugins with version validation\n- `--continue`/`--resume` now find sessions that added the current directory via `/add-dir`\n- `/color` now syncs the session accent color to claude.ai/code when Remote Control is connected\n- The `/model` picker now honors `ANTHROPIC_DEFAULT_*_MODEL_NAME`/`_DESCRIPTION` overrides when using a custom `ANTHROPIC_BASE_URL` gateway\n- When auto-update skips a plugin due to another plugin's version constraint, the skip now appears in `/doctor` and the `/plugin` Errors tab\n- Fixed `/mcp` menu hiding OAuth Authenticate/Re-authenticate actions for servers configured with `headersHelper`, and HTTP/SSE MCP servers with custom headers being stuck in \"needs authentication\" after a transient 401\n- Fixed MCP servers whose OAuth token response omits `expires_in` requiring re-authentication every hour\n- Fixed MCP step-up authorization silently refreshing instead of prompting for re-consent when the server's `insufficient_scope` 403 names a scope the current t",
+      "parsed_changes": [
+        {
+          "type": "updated",
+          "text": "Merged `/cost` and `/stats` into `/usage` — both remain as typing shortcuts that open the relevant tab",
+          "commands": [
+            "/cost",
+            "/stats",
+            "/usage"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "Create and switch between named custom themes from `/theme`, or hand-edit JSON files in `~/.claude/themes/`; plugins can also ship themes via a `themes/` directory",
+          "commands": [
+            "/theme",
+            "/themes"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "`--continue`/`--resume` now find sessions that added the current directory via `/add-dir`",
+          "commands": [
+            "/add-dir"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`/color` now syncs the session accent color to claude.ai/code when Remote Control is connected",
+          "commands": [
+            "/color",
+            "/code"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "The `/model` picker now honors `ANTHROPIC_DEFAULT_*_MODEL_NAME`/`_DESCRIPTION` overrides when using a custom `ANTHROPIC_BASE_URL` gateway",
+          "commands": [
+            "/model"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "When auto-update skips a plugin due to another plugin's version constraint, the skip now appears in `/doctor` and the `/plugin` Errors tab",
+          "commands": [
+            "/doctor",
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/mcp` menu hiding OAuth Authenticate/Re-authenticate actions for servers configured with `headersHelper`, and HTTP/SSE MCP servers with custom headers being stuck in \"needs authentication\" after a transient 401",
+          "commands": [
+            "/mcp",
+            "/Re-authenticate",
+            "/SSE"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed macOS keychain race where a concurrent MCP token refresh could overwrite a freshly-refreshed OAuth token, causing unexpected \"Please run /login\" prompts",
+          "commands": [
+            "/login"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed credential save crash on Linux/Windows corrupting `~/.claude/.credentials.json`",
+          "commands": [
+            "/Windows"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/login` having no effect in a session launched with `CLAUDE_CODE_OAUTH_TOKEN` — the env token is now cleared so disk credentials take effect",
+          "commands": [
+            "/login"
+          ]
+        },
+        {
+          "type": "new",
+          "text": "Fixed unreadable text in the \"new messages\" scroll pill and `/plugin` badges",
+          "commands": [
+            "/plugin"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/fork` writing the full parent conversation to disk per fork — now writes a pointer and hydrates on read",
+          "commands": [
+            "/fork"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed connecting to a remote session overwriting your local `model` setting in `~/.claude/settings.json`",
+          "commands": [
+            "/settings"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.117",
       "date": "2026-04-22",
