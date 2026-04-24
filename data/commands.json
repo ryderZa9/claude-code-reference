@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-23"
+    "last_updated": "2026-04-24"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,118 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.119",
+      "date": "2026-04-24",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.119",
+      "release_notes_raw": "## What's changed\n\n- `/config` settings (theme, editor mode, verbose, etc.) now persist to `~/.claude/settings.json` and participate in project/local/policy override precedence\n- Added `prUrlTemplate` setting to point the footer PR badge at a custom code-review URL instead of github.com\n- Added `CLAUDE_CODE_HIDE_CWD` environment variable to hide the working directory in the startup logo\n- `--from-pr` now accepts GitLab merge-request, Bitbucket pull-request, and GitHub Enterprise PR URLs\n- `--print` mode now honors the agent's `tools:` and `disallowedTools:` frontmatter, matching interactive-mode behavior\n- `--agent <name>` now honors the agent definition's `permissionMode` for built-in agents\n- PowerShell tool commands can now be auto-approved in permission mode, matching Bash behavior\n- Hooks: `PostToolUse` and `PostToolUseFailure` hook inputs now include `duration_ms` (tool execution time, excluding permission prompts and PreToolUse hooks)\n- Subagent and SDK MCP server reconfiguration now connects servers in parallel instead of serially\n- Plugins pinned by another plugin's version constraint now auto-update to the highest satisfying git tag\n- Vim mode: Esc in INSERT no longer pulls a queued message back into the input; press Esc again to interrupt\n- Slash command suggestions now highlight the characters that matched your query\n- Slash command picker now wraps long descriptions onto a second line instead of truncating\n- `owner/repo#N` shorthand links in output now use your git remote's host instead of always pointing at github.com\n- Security: `blockedMarketplaces` now correctly enforces `hostPattern` and `pathPattern` entries\n- OpenTelemetry: `tool_result` and `tool_decision` events now include `tool_use_id`; `tool_result` also includes `tool_input_size_bytes`\n- Status line: stdin JSON now includes `effort.level` and `thinking.enabled`\n- Fixed pasting CRLF content (Windows clipboards, Xcode console) inserting an extra blank line between every line\n- Fixed multi-lin",
+      "parsed_changes": [
+        {
+          "type": "updated",
+          "text": "`/config` settings (theme, editor mode, verbose, etc.) now persist to `~/.claude/settings.json` and participate in project/local/policy override precedence",
+          "commands": [
+            "/config",
+            "/settings",
+            "/local",
+            "/policy"
+          ]
+        },
+        {
+          "type": "updated",
+          "text": "`owner/repo#N` shorthand links in output now use your git remote's host instead of always pointing at github.com",
+          "commands": [
+            "/repo"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed Glob and Grep tools disappearing on native macOS/Linux builds when the Bash tool is denied via permissions",
+          "commands": [
+            "/Linux"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `${ENV_VAR}` placeholders in `headers` for HTTP/SSE/WebSocket MCP servers not being substituted before requests",
+          "commands": [
+            "/SSE",
+            "/WebSocket"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/skills` Enter key closing the dialog instead of pre-filling `/<skill-name>` in the prompt",
+          "commands": [
+            "/skills"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/agents` detail view mislabeling built-in tools unavailable to subagents as \"Unrecognized\"",
+          "commands": [
+            "/agents"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/export` showing the current default model instead of the model the conversation actually used",
+          "commands": [
+            "/export"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/usage` progress bars overlapping with their \"Resets …\" labels",
+          "commands": [
+            "/usage"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/plan` and `/plan open` not acting on the existing plan when entering plan mode",
+          "commands": [
+            "/plan",
+            "/plan"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/reload-plugins` and `/doctor` reporting load errors for disabled plugins",
+          "commands": [
+            "/reload-plugins",
+            "/doctor"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed disabled MCP servers appearing as \"failed\" in `/status`",
+          "commands": [
+            "/status"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed SDK/bridge `read_file` not correctly enforcing size cap on growing files",
+          "commands": [
+            "/bridge"
+          ]
+        },
+        {
+          "type": "fix",
+          "text": "Fixed `/doctor` warning about MCP server entries overridden by a higher-precedence scope",
+          "commands": [
+            "/doctor"
+          ]
+        },
+        {
+          "type": "removed",
+          "text": "Windows: removed false-positive \"Windows requires 'cmd /c' wrapper\" MCP config warning",
+          "commands": [
+            "/c"
+          ]
+        }
+      ]
+    },
     {
       "version": "2.1.118",
       "date": "2026-04-23",
