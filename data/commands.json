@@ -3,7 +3,7 @@
     "source": "https://docs.anthropic.com/en/docs/claude-code/cli-reference",
     "npm_package": "@anthropic-ai/claude-code",
     "github_repo": "anthropics/claude-code",
-    "last_updated": "2026-04-28"
+    "last_updated": "2026-04-29"
   },
   "quick_start": [
     {
@@ -1340,6 +1340,13 @@
     ]
   },
   "changelog": [
+    {
+      "version": "2.1.123",
+      "date": "2026-04-29",
+      "release_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.123",
+      "release_notes_raw": "## What's changed\n\n- Fixed OAuth authentication failing with a 401 retry loop when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` is set\n",
+      "parsed_changes": []
+    },
     {
       "version": "2.1.121",
       "date": "2026-04-28",
