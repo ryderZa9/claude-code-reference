@@ -104,6 +104,7 @@ async function main() {
   // Always update last_checked date
   stored.last_checked = today;
 
+  // Short-circuit: if we already have the latest version stored, skip the update
   if (latestVersion === stored.last_version) {
     console.log('No new version — nothing to do.');
     writeJSON(versionPath, stored);
